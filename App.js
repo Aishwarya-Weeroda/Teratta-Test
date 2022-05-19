@@ -7,18 +7,7 @@
  */
 
 import React from 'react';
-import {
-  Link,
-  Text,
-  HStack,
-  Center,
-  Heading,
-  Switch,
-  useColorMode,
-  NativeBaseProvider,
-  VStack,
-  Box,
-} from 'native-base';
+import {NativeBaseProvider} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {Provider} from 'react-redux';
