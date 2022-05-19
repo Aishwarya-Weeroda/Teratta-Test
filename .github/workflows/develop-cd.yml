@@ -116,13 +116,20 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: artifact
-      - name: upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
+      - name: Firebase App Distribution
+        uses: hasretsariyer/firebase-app-distribution-github-action@v1
         with:
-          appId: ${{secrets.FIREBASE_APP_ID_IOS}}
-          token: ${{secrets.FIREBASE_TOKEN}}
-          groups: ${{ secrets.FIREBASE_GROUP_DEV }}
-          file: output.ipa
+          app_id: ${{secrets.FIREBASE_APP_ID_IOS}}
+          firebase_token: ${{secrets.FIREBASE_TOKEN}}
+          app_file: output.ipa
+          tester_groups: ${{ secrets.FIREBASE_GROUP_DEV }}
+      # - name: upload artifact to Firebase App Distribution
+      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
+      #   with:
+      #     appId: ${{secrets.FIREBASE_APP_ID_IOS}}
+      #     token: ${{secrets.FIREBASE_TOKEN}}
+      #     groups: ${{ secrets.FIREBASE_GROUP_DEV }}
+      #     file: output.ipa
 
   # build_ios:
   #   runs-on: macos-latest
