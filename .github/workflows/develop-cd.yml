@@ -78,11 +78,11 @@ jobs:
       name: Install pod dependencies
     - name: Build iOS (debug)
       run: "xcodebuild \
-        -workspace ios/Terata.xcworkspace \
-        -scheme Terata \
+        -workspace ios/terata.xcworkspace \
+        -scheme terata \
         clean archive \
         -sdk iphoneos \
         -configuration Debug \
         -UseModernBuildSystem=NO \
-        -archivePath $PWD/Terata \
+        -archivePath $PWD/terata \
         CODE_SIGNING_ALLOWED=NO"
