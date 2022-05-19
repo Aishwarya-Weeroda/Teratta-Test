@@ -68,8 +68,10 @@ jobs:
     steps:
       - name: Getting the repo
         uses: actions/checkout@v2
-      - name: Installing node
+      - name: Use Node.js
         uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
       - name: Install React Native CLI
         run: |
           yarn global add react-native-cli
@@ -121,3 +123,28 @@ jobs:
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: ios_testers
           file: output.ipa
+
+  # build_ios:
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Use Node.js
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: 14.x
+  #   - run: yarn install
+  #   - run: xcode-select -p
+  #   - run: pod install
+  #     working-directory: ios
+  #     name: Install pod dependencies
+  #   - name: Build iOS (debug)
+  #     run: "xcodebuild \
+  #       -workspace ios/erata.xcworkspace \
+  #       -scheme Terata \
+  #       clean archive \
+  #       -sdk iphoneos \
+  #       -configuration Debug \
+  #       -UseModernBuildSystem=NO \
+  #       -archivePath $PWD/Terata \
+  #       CODE_SIGNING_ALLOWED=NO"
+
