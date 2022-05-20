@@ -116,42 +116,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: artifact
-      - name: Firebase App Distribution
-        uses: hasretsariyer/firebase-app-distribution-github-action@v1
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          app_id: ${{secrets.FIREBASE_APP_ID_IOS}}
-          firebase_token: ${{secrets.FIREBASE_TOKEN}}
-          app_file: output.ipa
-          tester_groups: ${{ secrets.FIREBASE_GROUP_DEV }}
-      # - name: upload artifact to Firebase App Distribution
-      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
-      #   with:
-      #     appId: ${{secrets.FIREBASE_APP_ID_IOS}}
-      #     token: ${{secrets.FIREBASE_TOKEN}}
-      #     groups: ${{ secrets.FIREBASE_GROUP_DEV }}
-      #     file: output.ipa
-
-  # build_ios:
-  #   runs-on: macos-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Use Node.js
-  #     uses: actions/setup-node@v1
-  #     with:
-  #       node-version: 14.x
-  #   - run: yarn install
-  #   - run: xcode-select -p
-  #   - run: pod install
-  #     working-directory: ios
-  #     name: Install pod dependencies
-  #   - name: Build iOS (debug)
-  #     run: "xcodebuild \
-  #       -workspace ios/erata.xcworkspace \
-  #       -scheme Terata \
-  #       clean archive \
-  #       -sdk iphoneos \
-  #       -configuration Debug \
-  #       -UseModernBuildSystem=NO \
-  #       -archivePath $PWD/Terata \
-  #       CODE_SIGNING_ALLOWED=NO"
-
+          appId: ${{secrets.FIREBASE_APP_ID_IOS}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: ${{ secrets.FIREBASE_GROUP_DEV }}
+          file: output.ipa
