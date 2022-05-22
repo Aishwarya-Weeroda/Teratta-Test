@@ -3,7 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 
 import Login from '../components/Login/Login';
-import HomeNavigator from './TabNavigation';
+import Tabs from './TabNavigation';
+import TabBar from './TabBar';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,7 @@ const StackNavigation = () => {
     <Stack.Navigator>
       <Stack.Screen
         name="LoginSuccess"
-        component={HomeNavigator}
+        component={TabBar}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

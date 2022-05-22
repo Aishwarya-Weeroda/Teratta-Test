@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import {
-  Box,
-  Heading,
-  VStack,
-  FormControl,
-  Input,
-  Button,
-  Center,
-} from 'native-base';
+  View,
+  Dimensions,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import {Checkbox} from 'native-base';
+import LinearGradient from 'react-native-linear-gradient';
+import {styles} from './LoginStyle';
+const {height, width} = Dimensions.get('screen');
 import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -31,53 +33,71 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="600"
-          color="coolGray.800"
-          _dark={{
-            color: 'warmGray.50',
-          }}>
-          Welcome To Terata
-        </Heading>
-        <Heading
-          mt="1"
-          _dark={{
-            color: 'warmGray.200',
-          }}
-          color="coolGray.600"
-          fontWeight="medium"
-          size="xs">
-          Sign in to continue!
-        </Heading>
-
-        <VStack space={3} mt="5">
-          <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
-            <Input
-              value={user.userName}
-              onChangeText={userName => onChange({userName})}
+    <>
+      <LinearGradient
+        colors={['#02aab0', '#00cdac']}
+        style={styles.container}></LinearGradient>
+      <View
+        style={[
+          styles.centerAlign,
+          {
+            marginTop: 2,
+            backgroundColor: 'rgba(200,200,200,0.9)',
+            height: height,
+          },
+        ]}>
+        <View style={styles.inputContainer}>
+          <Text
+            style={{fontSize: 20, fontStyle: 'italic', textAlign: 'center'}}>
+            Sign In
+          </Text>
+          <View style={{marginTop: 30, marginBottom: 10}}>
+            <TextInput placeholder="UserName" style={styles.input} />
+            <TextInput
+              secureTextEntry={true}
+              placeholder="Password"
+              style={styles.input}
             />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input
-              type="password"
-              value={user.password}
-              onChangeText={password => onChange({password})}
-            />
-          </FormControl>
-          <Button
-            mt="2"
-            colorScheme="indigo"
-            onPress={() => dispatch(onPress())}>
-            Sign in
-          </Button>
-        </VStack>
-      </Box>
-    </Center>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+              }}>
+              <Checkbox
+                accessibilityLabel="dummy"
+                style={{width: 20, height: 20, borderColor: '#aaa'}}
+              />
+              <Text style={{marginLeft: 8}}>Password Remember</Text>
+            </View>
+            <View style={{flex: 0.5, alignItems: 'flex-end'}}>
+              <TouchableOpacity>
+                <Text style={{color: '#be185d'}}>Forgot Password</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <TouchableOpacity onPress={() => dispatch(onPress())}>
+              <LinearGradient
+                style={{width: width / 1.25, padding: 15, borderRadius: 20}}
+                colors={['#02aab0', '#00cdac']}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 16,
+                  }}>
+                  Sign In
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </>
   );
 };
 
