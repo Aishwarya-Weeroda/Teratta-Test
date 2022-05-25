@@ -42,15 +42,12 @@ const Login = ({navigation}) => {
           styles.centerAlign,
           {
             marginTop: 2,
-            backgroundColor: 'rgba(200,200,200,0.9)',
+            backgroundColor: 'rgba(210,210,210,0)',
             height: height,
           },
         ]}>
-        <View style={styles.inputContainer}>
-          <Text
-            style={{fontSize: 20, fontStyle: 'italic', textAlign: 'center'}}>
-            Sign In
-          </Text>
+        <View style={[styles.inputContainer, styles.shdow]}>
+          <Text style={{fontSize: 20, textAlign: 'center'}}>Sign In</Text>
           <View style={{marginTop: 30, marginBottom: 10}}>
             <TextInput placeholder="UserName" style={styles.input} />
             <TextInput
@@ -81,7 +78,7 @@ const Login = ({navigation}) => {
           <View style={{alignItems: 'center', marginTop: 20}}>
             <TouchableOpacity onPress={() => dispatch(onPress())}>
               <LinearGradient
-                style={{width: width / 1.25, padding: 15, borderRadius: 20}}
+                style={{width: width / 1.25, padding: 15, borderRadius: 5}}
                 colors={['#02aab0', '#00cdac']}>
                 <Text
                   style={{

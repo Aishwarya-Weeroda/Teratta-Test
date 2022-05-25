@@ -1,13 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 
-import Dashboard from '../components/Dashboard/Dashboard';
-import Profile from '../components/Profile/Profile';
+// import Profile from '../components/Profile/Profile';
 import Agent from '../components/Agent/Agent';
 import Buyer from '../components/Buyer/Buyer';
+import Home from '../Screens/Home/Home';
+import Profile from '../Screens/Profile/Profile';
 const Tab = createBottomTabNavigator();
 
 const CustomTabBar = ({children, onPress}) => (
@@ -82,7 +83,7 @@ const TabBar = () => {
       })}>
       <Tab.Screen
         name="Home"
-        component={Dashboard}
+        component={Home}
         options={{
           tabBarIcon: ({focused, size}) => (
             <View
@@ -158,6 +159,7 @@ const TabBar = () => {
         name="Profile"
         component={Profile}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused, size}) => (
             <View
               style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
