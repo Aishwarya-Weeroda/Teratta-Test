@@ -1,102 +1,117 @@
 import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useTheme} from '../config';
+import styles from './Style';
 
-// import Profile from '../components/Profile/Profile';
 import Agent from '../components/Agent/Agent';
 import Buyer from '../components/Buyer/Buyer';
 import Home from '../Screens/Home/Home';
 import Profile from '../Screens/Profile/Profile';
+import Settings from '../Screens/Settings/Settings';
+import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
+import SelectDarkOption from '../Screens/SelectDarkOption';
+import ModalScreen from '../component/Model/Model';
 const Tab = createBottomTabNavigator();
 
-const CustomTabBar = ({children, onPress}) => (
-  <TouchableOpacity
-    style={{
-      top: -30,
-      justifyContent: 'center',
-      alignItems: 'center',
-      ...Style.shdow,
-    }}
-    onPress={onPress}>
-    <LinearGradient
-      style={{
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        overflow: 'hidden',
-        backgroundColor: '#e32f45',
-      }}
-      colors={['#02aab0', '#00cdac']}>
-      {/* <View
-        style={{
-          width: 70,
-          height: 70,
-          borderRadius: 35,
-          overflow: 'hidden',
-          backgroundColor: '#e32f45',
-        }}> */}
-      {children}
-      {/* </View> */}
-    </LinearGradient>
-  </TouchableOpacity>
-);
+const ProfileStack = createNativeStackNavigator();
 
-const Style = StyleSheet.create({
-  shdow: {
-    shadowColor: '#7F5DF0',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    elevation: 5,
-  },
-});
+const HomeStack = createNativeStackNavigator();
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator
+      initialRouteName={'Profile'}
+      screenOptions={() => ({headerShown: false})}>
+      <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen name="Settings" component={Settings} />
+      <ProfileStack.Screen name="ThemeSetting" component={ThemeSetting} />
+      <ProfileStack.Screen
+        name="SelectDarkOption"
+        component={SelectDarkOption}
+      />
+    </ProfileStack.Navigator>
+  );
+}
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator
+      initialRouteName={'HomeStack'}
+      screenOptions={() => ({headerShown: false})}>
+      <HomeStack.Screen
+        name="Modal"
+        component={ModalScreen}
+        screenOptions={() => ({headerShown: false})}
+      />
+      <HomeStack.Screen name="HomeStack" component={Home} />
+      {/* <HomeStack.Group>
+        <HomeStack.Screen name="Homee" component={Home} />
+      </HomeStack.Group>
+      <HomeStack.Group screenOptions={{presentation: 'modal'}}>
+        <HomeStack.Screen name="Modal" component={ModalScreen} />
+      </HomeStack.Group> */}
+    </HomeStack.Navigator>
+  );
+}
+
+const CustomTabBar = ({children, onPress}) => {
+  const {colors} = useTheme();
+  return (
+    <TouchableOpacity
+      style={[styles.shdow, styles.customBtn]}
+      onPress={onPress}>
+      <LinearGradient
+        style={styles.gradientStyle}
+        colors={[colors.primary, colors.secondary]}>
+        {children}
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+};
 
 const opt = {
-  tabBarShowLabel: false,
   tabBarStyle: {
-    position: 'absolute',
-    bottom: 25,
-    left: 20,
-    right: 20,
-    elevation: 0,
-    backGroundColor: '#fffffff',
-    borderRadius: 15,
-    height: 90,
-    ...Style.shdow,
+    ...styles.tabBarStyle,
+    // backGroundColor: '#fffffff',
+    ...styles.shdow,
   },
 };
 
+const getColors = (isFocused, colors) =>
+  isFocused ? colors.primary : '#748c94';
+
 const TabBar = () => {
+  const {colors} = useTheme();
+  const getColor = isFocused => getColors(isFocused, colors);
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({route}) => ({
-        ...opt,
-        // tabBarIcon: ({focused, color, size}) => {
-        //   return <Icon name="home-outline" size={size} color="#0ea5e9" />;
-        // },
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          ...styles.tabBarStyle,
+          ...styles.shdow,
+          backgroundColor: colors.tabBg,
+          borderColor: colors.border,
+        },
       })}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeStackScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused, size}) => (
-            <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+            <View style={styles.icon}>
               <Icon
                 name={focused ? 'home' : 'home-outline'}
                 size={size}
-                color={focused ? '#02aab0' : '#748c94'}
+                color={getColor(focused, colors)}
               />
-              <Text
-                style={{color: focused ? '#02aab0' : '#748c94', fontSize: 12}}>
-                Home
-              </Text>
+              <Text style={{color: getColor(focused), fontSize: 12}}>Home</Text>
             </View>
           ),
         }}
@@ -106,15 +121,13 @@ const TabBar = () => {
         component={Buyer}
         options={{
           tabBarIcon: ({focused, size}) => (
-            <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+            <View style={styles.icon}>
               <Icon
                 name={focused ? 'ios-people' : 'ios-people-outline'}
                 size={size}
-                color={focused ? '#02aab0' : '#748c94'}
+                color={getColor(focused)}
               />
-              <Text
-                style={{color: focused ? '#02aab0' : '#748c94', fontSize: 12}}>
+              <Text style={{color: getColor(focused), fontSize: 12}}>
                 Agents
               </Text>
             </View>
@@ -140,15 +153,13 @@ const TabBar = () => {
         component={Agent}
         options={{
           tabBarIcon: ({focused, size}) => (
-            <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+            <View style={styles.icon}>
               <Icon
                 name={focused ? 'cart' : 'cart-outline'}
                 size={size}
-                color={focused ? '#02aab0' : '#748c94'}
+                color={getColor(focused)}
               />
-              <Text
-                style={{color: focused ? '#02aab0' : '#748c94', fontSize: 12}}>
+              <Text style={{color: getColor(focused), fontSize: 12}}>
                 Supplier
               </Text>
             </View>
@@ -156,20 +167,18 @@ const TabBar = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileTab"
+        component={ProfileStackScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused, size}) => (
-            <View
-              style={{alignItems: 'center', justifyContent: 'center', top: 10}}>
+            <View style={styles.icon}>
               <Icon
                 name={focused ? 'person' : 'person-outline'}
                 size={size}
-                color={focused ? '#02aab0' : '#748c94'}
+                color={getColor(focused)}
               />
-              <Text
-                style={{color: focused ? '#02aab0' : '#748c94', fontSize: 12}}>
+              <Text style={{color: getColor(focused), fontSize: 12}}>
                 Profile
               </Text>
             </View>

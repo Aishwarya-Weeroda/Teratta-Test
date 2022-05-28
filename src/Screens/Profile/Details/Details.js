@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, TouchableOpacity, Text, Image} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import {Avatar} from 'native-base';
 import styles from './DetailsStyle';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useTheme} from '../../../config';
 
 const BaseColor = {
   grayColor: '#9B9B9B',
@@ -18,21 +19,11 @@ const BaseColor = {
   pinkColor: '#A569BD',
   greenColor: '#58D68D',
 };
-const colors = {
-  primary: '#E5634D',
-  primaryDark: '#C31C0D',
-  primaryLight: '#FF8A65',
-  accent: '#4A90A4',
-  background: 'white',
-  card: '#F5F5F5',
-  text: '#212121',
-  border: '#c7c7cc',
-};
 
 export default function ProfileDetail(props) {
+  const {colors} = useTheme();
   const {
     style,
-    image,
     styleLeft,
     styleThumb,
     styleRight,
@@ -60,26 +51,23 @@ export default function ProfileDetail(props) {
             }}>
             RB
           </Avatar>
-          <View style={[styles.point, {backgroundColor: '#02aab0'}]}>
+          <View style={[styles.point, {backgroundColor: colors.primary}]}>
             <Text style={{color: '#fff'}}>{point}</Text>
           </View>
         </View>
         <View style={{alignItems: 'flex-start'}}>
-          <Text headline semibold numberOfLines={1}>
-            {textFirst}
-          </Text>
+          <Text style={{color: colors.text}}>{textFirst}</Text>
           <Text
             body2
             style={{
               marginTop: 3,
               paddingRight: 10,
+              color: colors.text,
             }}
             numberOfLines={1}>
             {textSecond}
           </Text>
-          <Text footnote grayColor numberOfLines={1}>
-            {textThird}
-          </Text>
+          <Text style={{color: colors.text}}>{textThird}</Text>
         </View>
       </View>
       {icon && (

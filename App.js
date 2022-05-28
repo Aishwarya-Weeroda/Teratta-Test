@@ -14,6 +14,10 @@ import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {store} from './src/Redux/Store/Store';
 import StackNavigation from './src/Navigation/StackNavigation';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistStore} from 'redux-persist';
+
+let persistor = persistStore(store);
 
 const config = {
   dependencies: {
@@ -24,11 +28,13 @@ const config = {
 const App = () => {
   return (
     <Provider store={store}>
-      <NativeBaseProvider config={config}>
-        <NavigationContainer>
-          <StackNavigation />
-        </NavigationContainer>
-      </NativeBaseProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <NativeBaseProvider config={config}>
+          <NavigationContainer>
+            <StackNavigation />
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </PersistGate>
     </Provider>
   );
 };

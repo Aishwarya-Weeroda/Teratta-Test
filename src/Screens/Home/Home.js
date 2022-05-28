@@ -1,18 +1,16 @@
 import React from 'react';
-import {View, TouchableOpacity, TextInput, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from '../../component/Accordion/Accordion';
-import DashButton from '../../component/DashButton/DashButton';
-const colors = {
-  primary: '#E5634D',
-  primaryDark: '#C31C0D',
-  primaryLight: '#FF8A65',
-  accent: '#4A90A4',
-  background: 'white',
-  card: '#F5F5F5',
-  text: '#212121',
-  border: '#c7c7cc',
-};
+import {useTheme} from '../../config';
+import Header from '../../component/Header/Header';
 
 const styles = StyleSheet.create({
   textInput: {
@@ -41,37 +39,47 @@ const styles = StyleSheet.create({
   },
 });
 export default function Home({navigation}) {
+  const {colors} = useTheme();
   return (
-    <View style={{flex: 1}}>
-      <View style={{flexDirection: 'row'}}>
-        <View style={{flex: 1, alignItems: 'center', marginTop: 5}}>
-          <DashButton />
-        </View>
-      </View>
-      <View
-        style={[
-          styles.searchForm,
-          {
-            backgroundColor: colors.background,
-            borderColor: colors.border,
-            shadowColor: colors.border,
-          },
-          {marginTop: 10},
-        ]}>
-        <View style={[styles.textInput, {backgroundColor: colors.card}]}>
-          <TextInput placeholder="search" body1 grayColor style={{flex: 1}} />
-          <View style={{paddingVertical: 8}}>
-            <View style={[styles.lineForm, {backgroundColor: colors.border}]} />
+    <View style={{flex: 1, backgroundColor: colors.background}}>
+      <Header title="Enquiry" />
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView>
+          <View
+            style={[
+              styles.searchForm,
+              {
+                backgroundColor: colors.background,
+                borderColor: colors.border,
+                shadowColor: colors.border,
+              },
+              {marginTop: 10},
+            ]}>
+            <View style={[styles.textInput, {backgroundColor: colors.card}]}>
+              <TextInput
+                selectionColor={colors.primary}
+                placeholder="search"
+                style={{flex: 1, color: colors.text}}
+              />
+              <View style={{paddingVertical: 8}}>
+                <View
+                  style={[styles.lineForm, {backgroundColor: colors.border}]}
+                />
+              </View>
+              <TouchableOpacity>
+                <Icon name="md-search" size={18} color={colors.primary} />
+              </TouchableOpacity>
+            </View>
           </View>
-          <TouchableOpacity>
-            <Icon name="md-search" size={18} color="#02aab0" />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Accordion name="Accordion 1" />
-      <Accordion name="Accordion 2" />
-      <Accordion name="Accordion 3" />
-      <Accordion name="Accordion 4" />
+          <Accordion
+            onBtnPress={() => navigation.navigate('Modal')}
+            name="Accordion 1"
+          />
+          <Accordion name="Accordion 2" />
+          <Accordion name="Accordion 3" />
+          <Accordion name="Accordion 4" />
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }

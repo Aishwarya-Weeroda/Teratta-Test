@@ -3,24 +3,14 @@ import {
   View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   Platform,
   UIManager,
-  StyleSheet,
   LayoutAnimation,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-const colors = {
-  primary: '#E5634D',
-  primaryDark: '#C31C0D',
-  primaryLight: '#FF8A65',
-  accent: '#4A90A4',
-  background: 'white',
-  card: '#F5F5F5',
-  text: '#212121',
-  border: '#c7c7cc',
-};
+import {useTheme} from '../../config';
+import styles from './Style';
+import Tag from '../Tag';
 
 const enableExperimental = () => {
   if (Platform.OS === 'android') {
@@ -29,9 +19,9 @@ const enableExperimental = () => {
   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 };
 
-export default function Accordion({name}) {
+export default function Accordion({name, onBtnPress}) {
   const [collapseHour, setCollapseHour] = useState(true);
-
+  const {colors} = useTheme();
   /**
    * collapse open time
    */
@@ -42,24 +32,32 @@ export default function Accordion({name}) {
 
   return (
     <View
-      style={{
-        marginHorizontal: 5,
-      }}>
+      style={[
+        styles.shdow,
+        {
+          marginHorizontal: 5,
+        },
+      ]}>
       <TouchableOpacity
         style={[
           styles.line,
-          {backgroundColor: '#e7e5e4', borderRadius: 5, height: 40},
+          {
+            backgroundColor: colors.background,
+            borderRadius: 5,
+            height: 45,
+            borderColor: colors.border,
+          },
         ]}
         onPress={onCollapse}>
         <View style={styles.contentInforAction}>
           <View>
-            <Text>{name}</Text>
+            <Text style={{color: colors.text}}>{name}</Text>
           </View>
           <View style={{padding: 7}}>
             <Icon
               name={collapseHour ? 'chevron-up' : 'chevron-down'}
               size={24}
-              color="#02aab0"
+              color={colors.primary}
             />
           </View>
         </View>
@@ -77,8 +75,12 @@ export default function Accordion({name}) {
             <View
               style={[styles.lineWorkHours, {borderColor: colors.border}]}
               key={item.label}>
-              <Text>{item.label}</Text>
-              <Text>{`${item.start} - ${item.end}`}</Text>
+              <Text style={{color: colors.text}}>{item.label}</Text>
+              {!collapseHour && (
+                <Tag onPress={onBtnPress} status>
+                  view
+                </Tag>
+              )}
             </View>
           );
         })}
@@ -126,29 +128,3 @@ const products = {
     },
   ],
 };
-
-const styles = StyleSheet.create({
-  line: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-    borderColor: '#fecaca',
-  },
-  contentInforAction: {
-    marginLeft: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flex: 1,
-  },
-  lineWorkHours: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-  },
-  safeAreaView: {
-    flex: 1,
-  },
-});

@@ -1,17 +1,18 @@
 import React, {useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import {
   View,
   TouchableOpacity,
   StatusBar,
   useColorScheme,
   SafeAreaView,
-  Text,
 } from 'react-native';
+import Text from '../Text';
 import styles from './HeaderStyle';
 import PropTypes from 'prop-types';
 
 export default function Header(props) {
-  const forceDark = true;
+  const forceDark = useSelector(state => state.application.force_dark);
   const {
     style,
     styleLeft,
@@ -46,7 +47,7 @@ export default function Header(props) {
   }, [barStyle, forceDark, isDarkMode]);
 
   return (
-    <SafeAreaView style={{width: '100%'}} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={{width: '100%'}}>
       <View style={[styles.contain, style]}>
         <View style={{flex: 1}}>
           <TouchableOpacity

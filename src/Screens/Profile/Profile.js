@@ -11,17 +11,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import Header from '../../component/Header/Header';
 import ProfileDetail from './Details/Details';
+import {useTheme} from '../../config';
 
-const colors = {
-  primary: '#E5634D',
-  primaryDark: '#C31C0D',
-  primaryLight: '#FF8A65',
-  accent: '#4A90A4',
-  background: 'white',
-  card: '#F5F5F5',
-  text: '#212121',
-  border: '#c7c7cc',
-};
 const user = {
   image:
     'https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
@@ -32,8 +23,9 @@ const user = {
 };
 
 export default function Profile({navigation}) {
+  const {colors} = useTheme();
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header
         title="profile"
         renderRight={() => {
@@ -64,11 +56,11 @@ export default function Profile({navigation}) {
               onPress={() => {
                 navigation.navigate('ProfileEdit');
               }}>
-              <Text>edit profile</Text>
+              <Text style={{color: colors.text}}>edit profile</Text>
               <Icon
                 name="chevron-forward"
                 size={18}
-                color="#02aab0"
+                color={colors.primary}
                 style={{marginLeft: 5}}
               />
             </TouchableOpacity>
@@ -80,11 +72,11 @@ export default function Profile({navigation}) {
               onPress={() => {
                 navigation.navigate('ChangePassword');
               }}>
-              <Text>change password</Text>
+              <Text style={{color: colors.text}}>change password</Text>
               <Icon
                 name="chevron-forward"
                 size={18}
-                color="#02aab0"
+                color={colors.primary}
                 style={{marginLeft: 5}}
               />
             </TouchableOpacity>
@@ -94,11 +86,11 @@ export default function Profile({navigation}) {
                 {borderBottomColor: colors.border, borderBottomWidth: 1},
               ]}
               onPress={() => navigation.navigate('ContactUs')}>
-              <Text>contact_us</Text>
+              <Text style={{color: colors.text}}>contact_us</Text>
               <Icon
                 name="chevron-forward"
                 size={18}
-                color="#02aab0"
+                color={colors.primary}
                 style={{marginLeft: 5}}
               />
             </TouchableOpacity>
@@ -110,7 +102,7 @@ export default function Profile({navigation}) {
               onPress={() => {
                 navigation.navigate('AboutUs');
               }}>
-              <Text>about us</Text>
+              <Text style={{color: colors.text}}>about us</Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -119,18 +111,35 @@ export default function Profile({navigation}) {
                 <Icon
                   name="chevron-forward"
                   size={18}
-                  color="#02aab0"
+                  color={colors.primary}
+                  style={{marginLeft: 5}}
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.profileItem,
+                {borderBottomColor: colors.border, borderBottomWidth: 1},
+              ]}
+              onPress={() => {
+                navigation.navigate('ThemeSetting');
+              }}>
+              <Text style={{color: colors.text}}>Change Theme</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Icon
+                  name="chevron-forward"
+                  size={18}
+                  color={colors.primary}
                   style={{marginLeft: 5}}
                 />
               </View>
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <View style={{paddingHorizontal: 20, paddingVertical: 15}}>
-          {/* <Button full loading={loading} onPress={onLogout}>
-            {t('sign_out')}
-          </Button> */}
-        </View>
       </SafeAreaView>
     </View>
   );
