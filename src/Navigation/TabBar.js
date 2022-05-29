@@ -42,37 +42,6 @@ function canTabBarVisibile(route) {
       return 'flex';
   }
 }
-
-const Table = () => {
-  const renderRow = () => {
-    return (
-      <View style={{flex: 1, alignSelf: 'stretch', flexDirection: 'row'}}>
-        <View style={{flex: 1, alignSelf: 'stretch'}}>
-          <Text>savsdv</Text>
-        </View>
-        <View style={{flex: 1, alignSelf: 'stretch'}}>
-          <Text>savsdv</Text>
-        </View>
-        <View style={{flex: 1, alignSelf: 'stretch'}}>
-          <Text>savsdv</Text>
-        </View>
-        <View style={{flex: 1, alignSelf: 'stretch'}}>
-          <Text>savsdv</Text>
-        </View>
-        <View style={{flex: 1, alignSelf: 'stretch'}}>
-          <Text>savsdv</Text>
-        </View>
-      </View>
-    );
-  };
-  const data = [1, 2, 3, 4, 5];
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      {data.map(datum => renderRow())}
-    </View>
-  );
-};
-
 const Thbjb = ({navigation}) => {
   const {colors} = useTheme();
   return (
@@ -97,7 +66,7 @@ const Thbjb = ({navigation}) => {
         />
         <View style={{flex: 2}}>
           <ScrollView scrollEventThrottle={8}>
-            <Table />
+            <Text>enquiry Details</Text>
           </ScrollView>
         </View>
         <View style={{flex: 8}}>
