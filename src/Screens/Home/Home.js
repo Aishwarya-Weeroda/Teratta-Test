@@ -11,6 +11,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from '../../component/Accordion/Accordion';
 import {useTheme} from '../../config';
 import Header from '../../component/Header/Header';
+import {useDispatch} from 'react-redux';
+import {updateTab} from '../../Redux/Features/TopTabSlice';
 
 const styles = StyleSheet.create({
   textInput: {
@@ -40,6 +42,18 @@ const styles = StyleSheet.create({
 });
 export default function Home({navigation}) {
   const {colors} = useTheme();
+  const dispatch = useDispatch();
+  const onBtnPress = () => {
+    navigation.setOptions({tabBarVisible: false});
+
+    dispatch(
+      updateTab({
+        tabs: ['agen1', 'agen2', 'agent3', 'agent4'],
+        activeTab: 'agent3',
+      }),
+    );
+    navigation.navigate('Modal');
+  };
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header title="Enquiry" />
@@ -71,10 +85,7 @@ export default function Home({navigation}) {
               </TouchableOpacity>
             </View>
           </View>
-          <Accordion
-            onBtnPress={() => navigation.navigate('Modal')}
-            name="Accordion 1"
-          />
+          <Accordion onBtnPress={onBtnPress} name="Accordion 1" />
           <Accordion name="Accordion 2" />
           <Accordion name="Accordion 3" />
           <Accordion name="Accordion 4" />

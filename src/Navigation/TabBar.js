@@ -1,11 +1,15 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, LogBox} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from '../config';
 import styles from './Style';
+import {useSelector} from 'react-redux';
+
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Agent from '../components/Agent/Agent';
 import Buyer from '../components/Buyer/Buyer';
@@ -15,11 +19,52 @@ import Settings from '../Screens/Settings/Settings';
 import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
 import SelectDarkOption from '../Screens/SelectDarkOption';
 import ModalScreen from '../component/Model/Model';
+LogBox.ignoreLogs([
+  'Sending `onAnimatedValueUpdate` with no listeners registered.',
+]);
 const Tab = createBottomTabNavigator();
 
 const ProfileStack = createNativeStackNavigator();
 
 const HomeStack = createNativeStackNavigator();
+
+const TopTab = createMaterialTopTabNavigator();
+
+const Thbjb = () => {
+  const {colors} = useTheme();
+
+  const safeArea = useSafeAreaInsets();
+  return (
+    <>
+      <View style={{flex: 1, paddingTop: safeArea.top}}>
+        <Faq />
+      </View>
+    </>
+  );
+};
+
+const Faq = () => {
+  const {colors} = useTheme();
+  const tabs = useSelector(state => state.topTab.tabs);
+  const activeTab = useSelector(state => state.topTab.activeTab);
+  return (
+    <TopTab.Navigator
+      initialRouteName={activeTab}
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: 'white',
+        },
+        tabBarScrollEnabled: true,
+        tabBarIndicatorStyle: {
+          backgroundColor: colors.primary,
+        },
+      }}>
+      {tabs?.map(t => (
+        <TopTab.Screen key={t} name={t} component={ModalScreen} />
+      ))}
+    </TopTab.Navigator>
+  );
+};
 
 function ProfileStackScreen() {
   return (
@@ -42,18 +87,8 @@ function HomeStackScreen() {
     <HomeStack.Navigator
       initialRouteName={'HomeStack'}
       screenOptions={() => ({headerShown: false})}>
-      <HomeStack.Screen
-        name="Modal"
-        component={ModalScreen}
-        screenOptions={() => ({headerShown: false})}
-      />
+      <HomeStack.Screen name="Modal" component={Thbjb} />
       <HomeStack.Screen name="HomeStack" component={Home} />
-      {/* <HomeStack.Group>
-        <HomeStack.Screen name="Homee" component={Home} />
-      </HomeStack.Group>
-      <HomeStack.Group screenOptions={{presentation: 'modal'}}>
-        <HomeStack.Screen name="Modal" component={ModalScreen} />
-      </HomeStack.Group> */}
     </HomeStack.Navigator>
   );
 }

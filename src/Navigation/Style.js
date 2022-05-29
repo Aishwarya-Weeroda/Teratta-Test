@@ -33,4 +33,7 @@ export default StyleSheet.create({
     height: 90,
   },
   icon: {alignItems: 'center', justifyContent: 'center', top: 10},
+  topSafeArea: {
+    flex: 0,
+  },
 });
