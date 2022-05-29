@@ -5,14 +5,14 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  TextInput,
-  SafeAreaView,
   Image,
 } from 'react-native';
 import {BaseStyle, useTheme} from '../../config';
 import Text from '../../component/Text';
+import TextInput from '../../component/TextInput';
 import Header from '../../component/Header/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import styles from './Style';
 
@@ -134,29 +134,40 @@ export default function Messages({navigation}) {
           navigation.goBack();
         }}
       /> */}
-      <SafeAreaView style={BaseStyle.safeAreaView}>
-        <FlatList
-          ref={refFlatList}
-          data={messages}
-          keyExtractor={(item, index) => `message ${index}`}
-          renderItem={({item}) => renderItem(item)}
-        />
-        <View style={styles.inputContent}>
-          <View style={{flex: 1}}>
-            <TextInput
-              onChangeText={text => setInput(text)}
-              onSubmitEditing={() => sendMessage()}
-              placeholder="type_message"
-              value={input}
-            />
+      <KeyboardAvoidingView
+        style={{flex: 1, justifyContent: 'flex-end'}}
+        behavior={Platform.OS === 'android' ? 'height' : 'padding'}
+        keyboardVerticalOffset={offsetKeyboard}
+        enabled>
+        <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
+          <FlatList
+            ref={refFlatList}
+            data={messages}
+            keyExtractor={(item, index) => `message ${index}`}
+            renderItem={({item}) => renderItem(item)}
+          />
+          <View style={styles.inputContent}>
+            <View style={{flex: 1}}>
+              <TextInput
+                onChangeText={text => setInput(text)}
+                onSubmitEditing={() => sendMessage()}
+                placeholder="Type Message ..."
+                value={input}
+              />
+            </View>
+            <TouchableOpacity
+              style={[styles.sendIcon, {backgroundColor: colors.primary}]}
+              onPress={sendMessage}>
+              <Icon
+                name="paper-plane"
+                size={20}
+                color="white"
+                enableRTL={true}
+              />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={[styles.sendIcon, {backgroundColor: colors.primary}]}
-            onPress={sendMessage}>
-            <Icon name="paper-plane" size={20} color="white" enableRTL={true} />
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     </View>
   );
 }

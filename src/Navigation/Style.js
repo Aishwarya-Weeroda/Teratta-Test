@@ -24,13 +24,18 @@ export default StyleSheet.create({
     backgroundColor: '#e32f45',
   },
   tabBarStyle: {
-    position: 'absolute',
+    // position: 'absolute',
     bottom: 25,
     left: 20,
     right: 20,
     elevation: 0,
     borderRadius: 15,
     height: 90,
+  },
+  topTabBarStyle: {
+    // backgroundColor: 'red',
+    elevation: 2,
+    // borderRadius: 15,
   },
   icon: {alignItems: 'center', justifyContent: 'center', top: 10},
   topSafeArea: {
