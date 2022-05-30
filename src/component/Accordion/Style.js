@@ -26,10 +26,15 @@ export default StyleSheet.create({
   },
   lineWorkHours: {
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingVertical: 10,
     justifyContent: 'space-between',
     borderBottomWidth: 1,
+  },
+  textStyle: {
+    flexDirection: 'row',
+    // alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   safeAreaView: {
     flex: 1,

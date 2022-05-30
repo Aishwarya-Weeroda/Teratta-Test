@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   Platform,
   UIManager,
@@ -11,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../../config';
 import styles from './Style';
 import Tag from '../Tag';
+import Text from '../../component/Text';
 
 const enableExperimental = () => {
   if (Platform.OS === 'android') {
@@ -19,9 +19,23 @@ const enableExperimental = () => {
   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 };
 
-export default function Accordion({name, onBtnPress}) {
+export default function Accordion({name, onBtnPress, data}) {
   const [collapseHour, setCollapseHour] = useState(true);
   const {colors} = useTheme();
+
+  const getStatusColor = status => {
+    switch (status) {
+      case 'Completed':
+        return '#16a34a';
+      case 'In Progress':
+        return '#ea580c';
+      case 'Declined':
+        return '#b91c1c';
+      default:
+        return '#22c55e';
+    }
+  };
+
   /**
    * collapse open time
    */
@@ -50,10 +64,12 @@ export default function Accordion({name, onBtnPress}) {
         ]}
         onPress={onCollapse}>
         <View style={styles.contentInforAction}>
-          <View>
-            <Text style={{color: colors.text}}>{name}</Text>
+          <View style={{flex: 0.9}}>
+            <Text style={{color: colors.text}} numberOfLines={1}>
+              {name}
+            </Text>
           </View>
-          <View style={{padding: 7}}>
+          <View style={{flex: 0.1, padding: 7}}>
             <Icon
               name={collapseHour ? 'chevron-up' : 'chevron-down'}
               size={24}
@@ -64,20 +80,34 @@ export default function Accordion({name, onBtnPress}) {
       </TouchableOpacity>
       <View
         style={{
-          paddingLeft: 40,
+          paddingLeft: 20,
           paddingRight: 20,
           marginTop: 5,
           height: collapseHour ? 0 : null,
           overflow: 'hidden',
         }}>
-        {products?.openTime?.map?.(item => {
+        {data?.map?.((item, index) => {
           return (
             <View
               style={[styles.lineWorkHours, {borderColor: colors.border}]}
-              key={item.label}>
-              <Text style={{color: colors.text}}>{item.label}</Text>
+              key={item.name + index}>
+              <View style={styles.textStyle}>
+                <Text style={{color: colors.text}} numberOfLines={1}>
+                  {item.name}
+                </Text>
+                <Icon
+                  name={
+                    item.status === 'Declined'
+                      ? 'close-circle-outline'
+                      : 'checkmark-circle-outline'
+                  }
+                  size={15}
+                  color={getStatusColor(item.status)}
+                />
+              </View>
+
               {!collapseHour && (
-                <Tag onPress={onBtnPress} status>
+                <Tag onPress={() => onBtnPress(data, item.name)} status>
                   view
                 </Tag>
               )}

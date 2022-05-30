@@ -20,8 +20,8 @@ const themeGreen = {
   light: {
     dark: false,
     colors: {
-      primary: '#02aab0',
-      secondary: '#00cdac',
+      primary: '#15803d',
+      secondary: '#14b8a6',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#2dd4bf',
@@ -38,8 +38,8 @@ const themeGreen = {
   dark: {
     dark: true,
     colors: {
-      primary: '#02aab0',
-      secondary: '#00cdac',
+      primary: '#15803d',
+      secondary: '#14b8a6',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#FF8A65',

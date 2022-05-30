@@ -12,7 +12,7 @@ export default StyleSheet.create({
     elevation: 5,
   },
   customBtn: {
-    top: -30,
+    top: -10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -40,5 +40,19 @@ export default StyleSheet.create({
   icon: {alignItems: 'center', justifyContent: 'center', top: 10},
   topSafeArea: {
     flex: 0,
+  },
+  inputContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  sendIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
   },
 });

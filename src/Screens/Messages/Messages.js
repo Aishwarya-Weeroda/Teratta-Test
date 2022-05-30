@@ -10,7 +10,6 @@ import {
 import {BaseStyle, useTheme} from '../../config';
 import Text from '../../component/Text';
 import TextInput from '../../component/TextInput';
-import Header from '../../component/Header/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -53,7 +52,9 @@ export default function Messages({navigation}) {
       return (
         <View style={styles.userContent}>
           <Image
-            source="https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+            source={{
+              uri: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+            }}
             style={[styles.avatar, {borderColor: colors.border}]}
           />
           <View style={{paddingHorizontal: 8, flex: 7}}>
@@ -146,7 +147,7 @@ export default function Messages({navigation}) {
             keyExtractor={(item, index) => `message ${index}`}
             renderItem={({item}) => renderItem(item)}
           />
-          <View style={styles.inputContent}>
+          {/* <View style={styles.inputContent}>
             <View style={{flex: 1}}>
               <TextInput
                 onChangeText={text => setInput(text)}
@@ -165,7 +166,7 @@ export default function Messages({navigation}) {
                 enableRTL={true}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </SafeAreaView>
       </KeyboardAvoidingView>
     </View>

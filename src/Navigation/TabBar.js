@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, LogBox, ScrollView} from 'react-native';
+import {View, TouchableOpacity, LogBox, ScrollView} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -7,6 +7,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from '../config';
 import styles from './Style';
 import {useSelector} from 'react-redux';
+import TextInput from '../component/TextInput';
+import Text from '../component/Text';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
@@ -19,6 +21,8 @@ import Settings from '../Screens/Settings/Settings';
 import Messages from '../Screens/Messages/Messages';
 import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
 import SelectDarkOption from '../Screens/SelectDarkOption';
+import Enquiry from '../Screens/Enquiry';
+import AddEnquiry from '../Screens/AddEnquiry';
 import Header from '../component/Header/Header';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
@@ -28,6 +32,8 @@ const Tab = createBottomTabNavigator();
 const ProfileStack = createNativeStackNavigator();
 
 const HomeStack = createNativeStackNavigator();
+
+const EnquiryStack = createNativeStackNavigator();
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -66,11 +72,32 @@ const Thbjb = ({navigation}) => {
         />
         <View style={{flex: 2}}>
           <ScrollView scrollEventThrottle={8}>
-            <Text>enquiry Details</Text>
+            <Text textAlign="center">We Need Show Enquiry Details</Text>
           </ScrollView>
         </View>
         <View style={{flex: 8}}>
           <Faq />
+        </View>
+        <View style={{flex: 1, marginBottom: 10}}>
+          <View style={styles.inputContent}>
+            <View style={{flex: 1}}>
+              <TextInput
+                // onChangeText={text => setInput(text)}
+                // onSubmitEditing={() => sendMessage()}
+                placeholder="Type Message ..."
+                // value={input}
+              />
+            </View>
+            <TouchableOpacity
+              style={[styles.sendIcon, {backgroundColor: colors.primary}]}>
+              <Icon
+                name="paper-plane"
+                size={20}
+                color="white"
+                enableRTL={true}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </>
@@ -133,7 +160,50 @@ function HomeStackScreen() {
         component={Home}
         options={{headerShown: false}}
       />
+      <HomeStack.Screen
+        name="Enquiry"
+        component={Enquiry}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="AddEnquiry"
+        component={AddEnquiry}
+        options={{
+          headerShown: false,
+          animation: 'fade',
+          contentStyle: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          },
+          presentation: 'transparentModal',
+          gestureEnabled: false,
+        }}
+      />
     </HomeStack.Navigator>
+  );
+}
+
+function EnquiryStackScreen() {
+  return (
+    <EnquiryStack.Navigator initialRouteName={'Enquiry'}>
+      <EnquiryStack.Screen
+        name="Enquiry"
+        component={Enquiry}
+        options={{headerShown: false}}
+      />
+      <EnquiryStack.Screen
+        name="AddEnquiry"
+        component={AddEnquiry}
+        options={{
+          headerShown: false,
+          animation: 'fade',
+          contentStyle: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          },
+          presentation: 'transparentModal',
+          gestureEnabled: false,
+        }}
+      />
+    </EnquiryStack.Navigator>
   );
 }
 
@@ -175,21 +245,19 @@ const TabBar = () => {
         component={HomeStackScreen}
         options={({route}) => ({
           tabBarStyle: {
-            // ...styles.tabBarStyle,
             display: canTabBarVisibile(route),
-            // ...styles.shdow,
-            // backgroundColor: colors.tabBg,
-            // borderColor: colors.border,
           },
           headerShown: false,
           tabBarIcon: ({focused, size}) => (
             <View style={styles.icon}>
               <Icon
-                name={focused ? 'home' : 'home-outline'}
+                name={focused ? 'copy-sharp' : 'copy-outline'}
                 size={size}
                 color={getColor(focused, colors)}
               />
-              <Text style={{color: getColor(focused), fontSize: 12}}>Home</Text>
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Enquiry
+              </Text>
             </View>
           ),
         })}
@@ -212,10 +280,11 @@ const TabBar = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name="Enqury"
-        component={Agent}
+      {/* <Tab.Screen
+        name="EnquryTab"
+        component={EnquiryStackScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused, size}) => (
             <Icon
               name={focused ? 'add-outline' : 'add-outline'}
@@ -225,7 +294,7 @@ const TabBar = () => {
           ),
           tabBarButton: props => <CustomTabBar {...props} />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Agent"
         component={Agent}

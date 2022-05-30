@@ -13,6 +13,7 @@ import {useTheme} from '../../config';
 import Header from '../../component/Header/Header';
 import {useDispatch} from 'react-redux';
 import {updateTab} from '../../Redux/Features/TopTabSlice';
+import enquiryDetails from '../../data/EnquiryDetails';
 
 const styles = StyleSheet.create({
   textInput: {
@@ -39,17 +40,33 @@ const styles = StyleSheet.create({
     height: '100%',
     margin: 10,
   },
+  menuIcon: {
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 export default function Home({navigation}) {
   const {colors} = useTheme();
   const dispatch = useDispatch();
-  const onBtnPress = () => {
-    navigation.setOptions({tabBarVisible: false});
-
+  const onBtnPress = (agents, currentAgent) => {
     dispatch(
       updateTab({
-        tabs: ['agen1', 'agen2', 'agent3', 'agent4'],
-        activeTab: 'agent3',
+        tabs: agents.map(agent => agent.name),
+        activeTab: currentAgent,
       }),
     );
     navigation.navigate('Modal');
@@ -85,11 +102,20 @@ export default function Home({navigation}) {
               </TouchableOpacity>
             </View>
           </View>
-          <Accordion onBtnPress={onBtnPress} name="Accordion 1" />
-          <Accordion name="Accordion 2" />
-          <Accordion name="Accordion 3" />
-          <Accordion name="Accordion 4" />
+          {enquiryDetails.map((enquiryDetail, index) => (
+            <Accordion
+              key={enquiryDetail.name + index}
+              onBtnPress={onBtnPress}
+              data={enquiryDetail.agents}
+              name={enquiryDetail.name}
+            />
+          ))}
         </ScrollView>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Enquiry')}
+          style={[styles.menuIcon, {backgroundColor: colors.primary}]}>
+          <Icon name="md-add" size={25} color="#fff" />
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );
