@@ -20,8 +20,8 @@ const themeGreen = {
   light: {
     dark: false,
     colors: {
-      primary: '#15803d',
-      secondary: '#14b8a6',
+      primary: '#11998E',
+      secondary: '#38EF7D',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#2dd4bf',
@@ -38,8 +38,8 @@ const themeGreen = {
   dark: {
     dark: true,
     colors: {
-      primary: '#15803d',
-      secondary: '#14b8a6',
+      primary: '#11998E',
+      secondary: '#38EF7D',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#FF8A65',
@@ -59,8 +59,8 @@ const themeOrange = {
   light: {
     dark: false,
     colors: {
-      primary: '#36d1dc',
-      secondary: '#5b86e5',
+      primary: '#2E3192',
+      secondary: '#1BFFFF',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#FF8A65',
@@ -77,8 +77,8 @@ const themeOrange = {
   dark: {
     dark: true,
     colors: {
-      primary: '#36d1dc',
-      secondary: '#5b86e5',
+      primary: '#2E3192',
+      secondary: '#1BFFFF',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#FF8A65',
@@ -102,8 +102,8 @@ export const ThemeSupport = [
     light: {
       dark: false,
       colors: {
-        primary: '#cc2b5e',
-        secondary: '#753a88',
+        primary: '#662D8C',
+        secondary: '#ED1E79',
         primaryDark: '#C2185B',
         primaryLight: '#db2777',
         accent: '#8BC34A',
@@ -117,8 +117,8 @@ export const ThemeSupport = [
     dark: {
       dark: true,
       colors: {
-        primary: '#cc2b5e',
-        secondary: '#753a88',
+        primary: '#662D8C',
+        secondary: '#ED1E79',
         primaryDark: '#C2185B',
         primaryLight: '#F8BBD0',
         accent: '#8BC34A',

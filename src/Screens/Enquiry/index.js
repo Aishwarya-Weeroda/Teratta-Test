@@ -37,14 +37,27 @@ export default function Messages({navigation}) {
       <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
         <ScrollView scrollEventThrottle={8}>
           <View style={[styles.inputContainer, styles.shdow, {flex: 1}]}>
-            <View style={{flex: 1, margin: 5}}>
-              <Text>Sign In</Text>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 0.5}}></View>
+            <View style={{flex: 1, height: 20, flexDirection: 'row'}}>
+              <View style={{flex: 0.8}}></View>
               <View
                 style={{
-                  flex: 0.5,
+                  flex: 0.2,
+                  alignItems: 'flex-end',
+                }}>
+                <Icon
+                  style={{margin: -15}}
+                  name="trash-outline"
+                  size={25}
+                  color="#991b1b"
+                  enableRTL={true}
+                />
+              </View>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 0.8}}></View>
+              <View
+                style={{
+                  flex: 0.2,
                   alignItems: 'flex-end',
                   marginRight: -12,
                   marginBottom: -10,
@@ -57,21 +70,6 @@ export default function Messages({navigation}) {
                 />
               </View>
             </View>
-          </View>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <Text>Sign In</Text>
-          </View>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <Text>Sign In</Text>
-          </View>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <Text>Sign In</Text>
-          </View>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <Text>Sign In</Text>
-          </View>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <Text>Sign In</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
