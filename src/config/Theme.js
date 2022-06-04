@@ -59,7 +59,7 @@ const themeOrange = {
   light: {
     dark: false,
     colors: {
-      primary: '#22c55e',
+      primary: '#2E3192',
       secondary: '#1BFFFF',
       primaryDark: '#C31C0D',
       secondaryDark: '',
