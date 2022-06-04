@@ -48,7 +48,7 @@ function canTabBarVisibile(route) {
       return 'flex';
   }
 }
-const Thbjb = ({navigation}) => {
+const TopTabBarContainer = ({navigation}) => {
   const {colors} = useTheme();
   return (
     <>
@@ -76,7 +76,7 @@ const Thbjb = ({navigation}) => {
           </ScrollView>
         </View>
         <View style={{flex: 8}}>
-          <Faq />
+          <TopTabBar />
         </View>
         <View style={{flex: 1, marginBottom: 10}}>
           <View style={styles.inputContent}>
@@ -104,7 +104,7 @@ const Thbjb = ({navigation}) => {
   );
 };
 
-const Faq = () => {
+const TopTabBar = () => {
   const {colors} = useTheme();
   const tabs = useSelector(state => state.topTab.tabs);
   const activeTab = useSelector(state => state.topTab.activeTab);
@@ -152,7 +152,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator initialRouteName={'HomeStack'}>
       <HomeStack.Screen
         name="Modal"
-        component={Thbjb}
+        component={TopTabBarContainer}
         options={{headerShown: false}}
       />
       <HomeStack.Screen
