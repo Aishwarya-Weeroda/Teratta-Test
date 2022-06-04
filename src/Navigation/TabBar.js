@@ -170,12 +170,12 @@ function HomeStackScreen() {
         component={AddEnquiry}
         options={{
           headerShown: false,
-          animation: 'fade',
-          contentStyle: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          },
-          presentation: 'transparentModal',
-          gestureEnabled: false,
+          // animation: 'fade',
+          // contentStyle: {
+          //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          // },
+          // presentation: 'transparentModal',
+          // gestureEnabled: false,
         }}
       />
     </HomeStack.Navigator>

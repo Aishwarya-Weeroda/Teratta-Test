@@ -20,7 +20,7 @@ const themeGreen = {
   light: {
     dark: false,
     colors: {
-      primary: '#11998E',
+      primary: '#22c55e',
       secondary: '#38EF7D',
       primaryDark: '#C31C0D',
       secondaryDark: '',
@@ -59,7 +59,7 @@ const themeOrange = {
   light: {
     dark: false,
     colors: {
-      primary: '#2E3192',
+      primary: '#22c55e',
       secondary: '#1BFFFF',
       primaryDark: '#C31C0D',
       secondaryDark: '',
