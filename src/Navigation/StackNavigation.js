@@ -3,8 +3,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 
 import Login from '../components/Login/Login';
-import Tabs from './TabNavigation';
-import TabBar from './TabBar';
+import TabBar, {
+  AgentBottomTabs,
+  BuyerBottomTabs,
+  SupplierBottomTabs,
+} from './TabBar';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,11 +23,22 @@ const StackNavigation = () => {
     </Stack.Navigator>
   );
 
+  const getBottomTabs = () => {
+    switch (userState.type) {
+      case 'buyer':
+        return BuyerBottomTabs;
+      case 'agent':
+        return AgentBottomTabs;
+      case 'supplier':
+        return SupplierBottomTabs;
+    }
+  };
+
   const authStack = () => (
     <Stack.Navigator>
       <Stack.Screen
         name="LoginSuccess"
-        component={TabBar}
+        component={getBottomTabs()}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

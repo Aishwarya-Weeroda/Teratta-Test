@@ -12,6 +12,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../../component/Header/Header';
 import ProfileDetail from './Details/Details';
 import {useTheme} from '../../config';
+import LinearGradient from 'react-native-linear-gradient';
+import {logout} from '../../Redux/Features/LoginSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
 const user = {
   image:
@@ -24,6 +27,8 @@ const user = {
 
 export default function Profile({navigation}) {
   const {colors} = useTheme();
+  const dispatch = useDispatch();
+  const userState = useSelector(state => state.login);
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header
@@ -39,10 +44,10 @@ export default function Profile({navigation}) {
           <View style={styles.contain}>
             <ProfileDetail
               image={user.image}
-              textFirst={user.name}
+              textFirst={userState.name}
               point={user.rate}
-              textSecond={user.description}
-              textThird={user.email}
+              textSecond={userState.role}
+              textThird={userState.email}
             />
             <TouchableOpacity
               style={[
@@ -140,6 +145,17 @@ export default function Profile({navigation}) {
             </TouchableOpacity>
           </View>
         </ScrollView>
+        <View style={styles.loginBtnContainer}>
+          <TouchableOpacity onPress={() => dispatch(logout())}>
+            <LinearGradient
+              style={styles.loginBtn}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={[colors.primary, colors.secondary]}>
+              <Text style={styles.loginTxt}>Sign Out</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </View>
   );

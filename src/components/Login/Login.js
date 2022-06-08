@@ -24,9 +24,10 @@ const Login = ({navigation}) => {
   };
 
   const onPress = () => {
-    console.log(user.userName);
-    if (Users.some(obj => obj.userName === user.userName)) {
-      dispatch(login(user));
+    const usrObj = Users.filter(obj => obj.userName === user.userName);
+    console.log(usrObj);
+    if (usrObj.length > 0) {
+      dispatch(login({...user, ...usrObj[0]}));
     }
   };
 

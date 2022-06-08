@@ -11,6 +11,16 @@ export default StyleSheet.create({
     shadowRadius: 3.5,
     elevation: 10,
   },
+  cardShdow: {
+    shadowColor: '#a8a29e',
+    shadowOffset: {
+      // width: 1,
+      // height: 5,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 3.5,
+    elevation: 10,
+  },
   line: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -32,6 +42,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
   },
   textStyle: {
+    flex: 0.9,
     flexDirection: 'row',
     // alignItems: 'center',
     justifyContent: 'flex-start',

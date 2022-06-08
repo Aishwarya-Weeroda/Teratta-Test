@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, TouchableOpacity, LogBox, ScrollView} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  LogBox,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
+const {width} = Dimensions.get('screen');
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,20 +30,31 @@ import Messages from '../Screens/Messages/Messages';
 import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
 import SelectDarkOption from '../Screens/SelectDarkOption';
 import Enquiry from '../Screens/Enquiry';
+import SentRFQ from '../Screens/SentRFQ';
+import RFQs from '../Screens/RFQs';
+import CreateRFQ from '../Screens/CreateRFQs';
+import RFQDetails from '../Screens/RFQDetails';
 import AddEnquiry from '../Screens/AddEnquiry';
 import Header from '../component/Header/Header';
+import Search from '../component/Search';
+import EnquiryList from '../Screens/EnquiryList';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
 const Tab = createBottomTabNavigator();
 
+const BuyerBottomTab = createBottomTabNavigator();
+const AgentBottomTab = createBottomTabNavigator();
+const SupplierBottomTab = createBottomTabNavigator();
+
 const ProfileStack = createNativeStackNavigator();
 
 const HomeStack = createNativeStackNavigator();
-
-const EnquiryStack = createNativeStackNavigator();
+const AgentStack = createNativeStackNavigator();
+const SupplierStack = createNativeStackNavigator();
 
 const TopTab = createMaterialTopTabNavigator();
+const AgentTopTab = createMaterialTopTabNavigator();
 
 function canTabBarVisibile(route) {
   // If the focused route is not found, we
@@ -104,6 +123,21 @@ const TopTabBarContainer = ({navigation}) => {
   );
 };
 
+const AgentTopTabBarContainer = ({navigation}) => {
+  const {colors} = useTheme();
+  return (
+    <>
+      <View style={{flex: 1, backgroundColor: colors.background}}>
+        <Header title="Enquiry & RFQ" style={{borderColor: colors.border}} />
+        <Search />
+        <View style={{flex: 8}}>
+          <AgentTopTabBar />
+        </View>
+      </View>
+    </>
+  );
+};
+
 const TopTabBar = () => {
   const {colors} = useTheme();
   const tabs = useSelector(state => state.topTab.tabs);
@@ -128,6 +162,30 @@ const TopTabBar = () => {
         <TopTab.Screen key={t} name={t} component={Messages} />
       ))}
     </TopTab.Navigator>
+  );
+};
+
+const AgentTopTabBar = () => {
+  const {colors} = useTheme();
+  return (
+    <AgentTopTab.Navigator
+      initialRouteName="EnquiryList"
+      style={{borderColor: 'red'}}
+      screenOptions={{
+        tabBarStyle: {
+          borderBottomWidth: 0.7,
+          borderColor: colors.border,
+          ...styles.topTabBarStyle,
+        },
+        tabBarItemStyle: {width: width / 2},
+        tabBarScrollEnabled: true,
+        tabBarIndicatorStyle: {
+          backgroundColor: colors.primary,
+        },
+      }}>
+      <AgentTopTab.Screen name="Enquiry List" component={EnquiryList} />
+      <AgentTopTab.Screen name="Sent RFQ" component={SentRFQ} />
+    </AgentTopTab.Navigator>
   );
 };
 
@@ -182,28 +240,31 @@ function HomeStackScreen() {
   );
 }
 
-function EnquiryStackScreen() {
+function AgentStackScreen() {
   return (
-    <EnquiryStack.Navigator initialRouteName={'Enquiry'}>
-      <EnquiryStack.Screen
-        name="Enquiry"
-        component={Enquiry}
+    <AgentStack.Navigator
+      initialRouteName={'AgentHome'}
+      screenOptions={{headerShown: false}}>
+      <AgentStack.Screen
+        name="Modal"
+        component={TopTabBarContainer}
         options={{headerShown: false}}
       />
-      <EnquiryStack.Screen
-        name="AddEnquiry"
-        component={AddEnquiry}
-        options={{
-          headerShown: false,
-          animation: 'fade',
-          contentStyle: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          },
-          presentation: 'transparentModal',
-          gestureEnabled: false,
-        }}
-      />
-    </EnquiryStack.Navigator>
+      <AgentStack.Screen name="CreateRFQ" component={CreateRFQ} />
+      <AgentStack.Screen name="AgentHome" component={AgentTopTabBarContainer} />
+      <AgentStack.Screen name="RFQDetails" component={RFQDetails} />
+    </AgentStack.Navigator>
+  );
+}
+
+function SupplierStackScreen() {
+  return (
+    <SupplierStack.Navigator
+      initialRouteName={'RFQs'}
+      screenOptions={{headerShown: false}}>
+      <SupplierStack.Screen name="RFQs" component={RFQs} />
+      <SupplierStack.Screen name="RFQDetails" component={RFQDetails} />
+    </SupplierStack.Navigator>
   );
 }
 
@@ -337,3 +398,253 @@ const TabBar = () => {
 };
 
 export default TabBar;
+
+export const BuyerBottomTabs = () => {
+  const {colors} = useTheme();
+  const getColor = isFocused => getColors(isFocused, colors);
+  return (
+    <BuyerBottomTab.Navigator
+      initialRouteName="Home"
+      screenOptions={({route}) => ({
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          // ...styles.tabBarStyle,
+          ...styles.shdow,
+          backgroundColor: colors.tabBg,
+          borderColor: colors.border,
+        },
+      })}>
+      <BuyerBottomTab.Screen
+        name="Home"
+        component={HomeStackScreen}
+        options={({route}) => ({
+          tabBarStyle: {
+            display: canTabBarVisibile(route),
+          },
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'copy-sharp' : 'copy-outline'}
+                size={size}
+                color={getColor(focused, colors)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Enquiry
+              </Text>
+            </View>
+          ),
+        })}
+      />
+      <BuyerBottomTab.Screen
+        name="Agents"
+        component={Agent}
+        options={{
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'ios-people' : 'ios-people-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Agents
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <BuyerBottomTab.Screen
+        name="ProfileTab"
+        component={ProfileStackScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'person' : 'person-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Profile
+              </Text>
+            </View>
+          ),
+        }}
+      />
+    </BuyerBottomTab.Navigator>
+  );
+};
+
+export const AgentBottomTabs = () => {
+  const {colors} = useTheme();
+  const getColor = isFocused => getColors(isFocused, colors);
+  return (
+    <AgentBottomTab.Navigator
+      initialRouteName="Home"
+      screenOptions={({route}) => ({
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          // ...styles.tabBarStyle,
+          ...styles.shdow,
+          backgroundColor: colors.tabBg,
+          borderColor: colors.border,
+        },
+      })}>
+      <AgentBottomTab.Screen
+        name="Home"
+        component={AgentStackScreen}
+        options={({route}) => ({
+          tabBarStyle: {
+            display: canTabBarVisibile(route),
+          },
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'copy-sharp' : 'copy-outline'}
+                size={size}
+                color={getColor(focused, colors)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>RFQs</Text>
+            </View>
+          ),
+        })}
+      />
+      <BuyerBottomTab.Screen
+        name="Agents"
+        component={CreateRFQ}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'ios-people' : 'ios-people-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Agents
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <AgentBottomTab.Screen
+        name="Supplier"
+        component={Agent}
+        options={{
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'ios-people' : 'ios-people-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Supplier
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <AgentBottomTab.Screen
+        name="ProfileTab"
+        component={ProfileStackScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'person' : 'person-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Profile
+              </Text>
+            </View>
+          ),
+        }}
+      />
+    </AgentBottomTab.Navigator>
+  );
+};
+export const SupplierBottomTabs = () => {
+  const {colors} = useTheme();
+  const getColor = isFocused => getColors(isFocused, colors);
+  return (
+    <SupplierBottomTab.Navigator
+      initialRouteName="Home"
+      screenOptions={({route}) => ({
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          // ...styles.tabBarStyle,
+          ...styles.shdow,
+          backgroundColor: colors.tabBg,
+          borderColor: colors.border,
+        },
+      })}>
+      <SupplierBottomTab.Screen
+        name="Home"
+        component={SupplierStackScreen}
+        options={({route}) => ({
+          tabBarStyle: {
+            display: canTabBarVisibile(route),
+          },
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'copy-sharp' : 'copy-outline'}
+                size={size}
+                color={getColor(focused, colors)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Enquiry
+              </Text>
+            </View>
+          ),
+        })}
+      />
+      <SupplierBottomTab.Screen
+        name="Agents"
+        component={Agent}
+        options={{
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'ios-people' : 'ios-people-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Agents
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <SupplierBottomTab.Screen
+        name="ProfileTab"
+        component={ProfileStackScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused, size}) => (
+            <View style={styles.icon}>
+              <Icon
+                name={focused ? 'person' : 'person-outline'}
+                size={size}
+                color={getColor(focused)}
+              />
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Profile
+              </Text>
+            </View>
+          ),
+        }}
+      />
+    </SupplierBottomTab.Navigator>
+  );
+};

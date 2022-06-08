@@ -2,6 +2,7 @@ import React from 'react';
 import {
   View,
   TouchableOpacity,
+  TextInput,
   StyleSheet,
   SafeAreaView,
   ScrollView,
@@ -12,10 +13,33 @@ import {useTheme} from '../../config';
 import Header from '../../component/Header/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateTab} from '../../Redux/Features/TopTabSlice';
-import Search from '../../component/Search';
 // import enquiryDetails from '../../data/EnquiryDetails';
 
 const styles = StyleSheet.create({
+  textInput: {
+    height: 46,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  searchForm: {
+    marginHorizontal: 5,
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 0.5,
+    shadowOffset: {width: 1.5, height: 1.5},
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+    elevation: 1,
+  },
+  lineForm: {
+    width: 1,
+    height: '100%',
+    margin: 10,
+  },
   menuIcon: {
     width: 50,
     height: 50,
@@ -35,9 +59,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-export default function Home({navigation}) {
+export default function SentRFQ({navigation}) {
   const {colors} = useTheme();
-  const enquiryDetails = useSelector(state => state.rfq.enquiryDetails);
+  const enquiryDetails = useSelector(state => state.rfq.sentRFQS);
   const dispatch = useDispatch();
   const onBtnPress = (agents, currentAgent) => {
     dispatch(
@@ -50,10 +74,9 @@ export default function Home({navigation}) {
   };
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
-      <Header title="Enquiry" />
+      {/* <Header title="RFQ" /> */}
       <SafeAreaView style={{flex: 1}}>
         <ScrollView>
-          <Search />
           {enquiryDetails.map((enquiryDetail, index) => (
             <Accordion
               key={enquiryDetail.name + index}
@@ -63,11 +86,6 @@ export default function Home({navigation}) {
             />
           ))}
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Enquiry')}
-          style={[styles.menuIcon, {backgroundColor: colors.primary}]}>
-          <Icon name="md-add" size={25} color="#fff" />
-        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );

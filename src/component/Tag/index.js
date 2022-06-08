@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet} from 'react-native';
-import {useTheme} from '../../config';
+import {useTheme, BaseColor} from '../../config';
 import PropTypes from 'prop-types';
 import Text from '../Text';
 import styles from './styles';
@@ -22,6 +22,7 @@ export default function Tag(props) {
     gray,
     chip,
     status,
+    declined,
     rate,
     rateSmall,
     sale,
@@ -54,6 +55,7 @@ export default function Tag(props) {
           {backgroundColor: colors.card, borderColor: colors.accent},
         ],
         status && [styles.status, {backgroundColor: colors.primary}],
+        declined && [styles.status, {backgroundColor: BaseColor.danger}],
         rate && [styles.rate, {backgroundColor: colors.primaryLight}],
         rateSmall && [styles.rateSmall, {backgroundColor: colors.primaryLight}],
         sale && [styles.sale, {backgroundColor: colors.primaryLight}],
@@ -80,6 +82,7 @@ export default function Tag(props) {
           gray && styles.textGray,
           chip && [styles.textChip, {color: colors.accent}],
           status && styles.textStatus,
+          declined && styles.textStatus,
           rate && styles.textRate,
           rateSmall && styles.textRateSmall,
           sale && styles.textSale,
@@ -109,6 +112,7 @@ Tag.propTypes = {
   rate: PropTypes.bool,
   rateSmall: PropTypes.bool,
   status: PropTypes.bool,
+  declined: PropTypes.bool,
   sale: PropTypes.bool,
 };
 

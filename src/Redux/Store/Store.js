@@ -13,6 +13,7 @@ import {combineReducers} from 'redux';
 import login from '../Features/LoginSlice';
 import application from '../Features/ApplicationSlice';
 import topTab from '../Features/TopTabSlice';
+import rfq from '../Features/RFQsSlice';
 import logger from 'redux-logger';
 
 const persistConfig = {
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   login,
   application,
   topTab,
+  rfq,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

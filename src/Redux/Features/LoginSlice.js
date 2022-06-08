@@ -4,6 +4,10 @@ const initialState = {
   isLoggedIn: false,
   userName: '',
   password: '',
+  name: '',
+  email: '',
+  role: '',
+  type: '',
 };
 
 export const loginSlice = createSlice({
@@ -18,7 +22,9 @@ export const loginSlice = createSlice({
       };
     },
     logout: () => {
-      initialState;
+      return {
+        ...initialState,
+      };
     },
   },
 });

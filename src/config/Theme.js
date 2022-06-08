@@ -13,6 +13,7 @@ export const BaseColor = {
   blueColor: '#5DADE2',
   pinkColor: '#A569BD',
   greenColor: '#58D68D',
+  danger: '#be123c',
 };
 
 const themeGreen = {
@@ -20,8 +21,8 @@ const themeGreen = {
   light: {
     dark: false,
     colors: {
-      primary: '#22c55e',
-      secondary: '#38EF7D',
+      primary: '#10b981',
+      secondary: '#6CFF95',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#2dd4bf',
@@ -38,8 +39,8 @@ const themeGreen = {
   dark: {
     dark: true,
     colors: {
-      primary: '#11998E',
-      secondary: '#38EF7D',
+      primary: '#18c729',
+      secondary: '#FEF500',
       primaryDark: '#C31C0D',
       secondaryDark: '',
       primaryLight: '#FF8A65',

@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+const {width} = Dimensions.get('screen');
 
 export default StyleSheet.create({
   contentTitle: {
@@ -23,5 +24,17 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 20,
+  },
+  loginBtnContainer: {alignItems: 'center', marginBottom: 10},
+  loginBtn: {
+    // width: 100,
+    padding: 15,
+    borderRadius: 5,
+  },
+  loginTxt: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });

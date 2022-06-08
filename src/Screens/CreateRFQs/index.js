@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
 import {BaseStyle, useTheme} from '../../config';
 import Text from '../../component/Text';
+import Tag from '../../component/Tag';
 import TextInput from '../../component/TextInput';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Voice from '@react-native-community/voice';
 import styles from './style';
 
-export default function Messages({navigation}) {
+export default function CreateRFQ({navigation}) {
   const {colors} = useTheme();
 
   const datas = [
@@ -22,17 +23,14 @@ export default function Messages({navigation}) {
         {
           id: 1,
           email: 'test1@royal.com',
-          // selected: true,
         },
         {
           id: 2,
           email: 'test2@royal.com',
-          // selected: true,
         },
         {
           id: 3,
           email: 'test3@royal.com',
-          // selected: true,
         },
       ],
     },
@@ -47,7 +45,6 @@ export default function Messages({navigation}) {
         {
           id: 2,
           email: 'test2@shanmugam.com',
-          // selected: true,
         },
         {
           id: 3,
@@ -79,6 +76,8 @@ export default function Messages({navigation}) {
   const [color, setColor] = useState('');
   const [shade, setShade] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [rate, setRate] = useState('');
+  const [amount, setAmount] = useState('');
   const [currentField, setCurrentField] = useState();
   useEffect(() => {
     return () => {
@@ -87,7 +86,6 @@ export default function Messages({navigation}) {
   }, []);
 
   const startRecordingBlend = async field => {
-    console.log('startRecordingBlend');
     setCurrentField(field);
     Voice.onSpeechResults = blendHandler;
     setCountBlend('');
@@ -151,6 +149,38 @@ export default function Messages({navigation}) {
     setQuantity(e.value[0]);
   };
 
+  const startRecordingRate = async field => {
+    setCurrentField(field);
+    Voice.onSpeechResults = rateHandler;
+    setQuantity('');
+    try {
+      await Voice.destroy().then(Voice.removeAllListeners);
+      await Voice.start('en-US').then(console.log('started'));
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const rateHandler = e => {
+    setRate(e.value[0]);
+  };
+
+  const startRecordingAmount = async field => {
+    setCurrentField(field);
+    Voice.onSpeechResults = amountHandler;
+    setQuantity('');
+    try {
+      await Voice.destroy().then(Voice.removeAllListeners);
+      await Voice.start('en-US').then(console.log('started'));
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const amountHandler = e => {
+    setAmount(e.value[0]);
+  };
+
   const stopRecording = async () => {
     setCurrentField('');
     try {
@@ -206,7 +236,7 @@ export default function Messages({navigation}) {
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header
-        title="Add Enquiry"
+        title="Create RFQ"
         renderLeft={() => {
           return (
             <Icon
@@ -216,6 +246,10 @@ export default function Messages({navigation}) {
             />
           );
         }}
+        renderRight={() => {
+          return <Tag declined> Decline </Tag>;
+        }}
+        onPressRight={() => console.log('ascbasmhcb')}
         onPressLeft={() => {
           navigation.goBack();
         }}
@@ -277,6 +311,32 @@ export default function Messages({navigation}) {
                   value={quantity}
                   onChangeText={text => setQuantity(text)}
                 />
+                <View style={styles.contentTitle}>
+                  <Text headline>Rate</Text>
+                </View>
+                <TextInput
+                  placeholder="Enter Rate"
+                  icon={
+                    currentField !== 'rate'
+                      ? getIcon('rate', startRecordingRate)
+                      : fontIcon
+                  }
+                  value={quantity}
+                  onChangeText={text => setRate(text)}
+                />
+                <View style={styles.contentTitle}>
+                  <Text headline>Amount</Text>
+                </View>
+                <TextInput
+                  placeholder="Enter Amount"
+                  icon={
+                    currentField !== 'amount'
+                      ? getIcon('amount', startRecordingAmount)
+                      : fontIcon
+                  }
+                  value={quantity}
+                  onChangeText={text => setAmount(text)}
+                />
               </View>
             </View>
           </ScrollView>
@@ -299,7 +359,7 @@ export default function Messages({navigation}) {
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={[colors.primary, colors.secondary]}>
-            <Text style={styles.loginTxt}>Send Enquiry</Text>
+            <Text style={styles.loginTxt}>Send RFQ</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
