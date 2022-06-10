@@ -6,7 +6,7 @@ import Card from '../../component/Accordion/Card';
 import datas from '../../data/EnquiryList';
 import Header from '../../component/Header/Header';
 
-function EnquiryList({navigation}) {
+function RFQ({navigation}) {
   const {colors} = useTheme();
   return (
     <View
@@ -14,22 +14,22 @@ function EnquiryList({navigation}) {
         flex: 1,
         backgroundColor: colors.background,
       }}>
-      <Header title="RFQ" />
+      {/* <Header title="RFQ" /> */}
       {datas?.map((data, index) => (
         <Card
           key={data.name + index}
           data={data}
-          onBtnPress={() => navigation.navigate('RFQDetails')}
+          onBtnPress={() => navigation.navigate('CreateRFQ')}
         />
       ))}
     </View>
   );
 }
 
-EnquiryList.propTypes = {
+RFQ.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-export default EnquiryList;
+export default RFQ;

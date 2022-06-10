@@ -12,7 +12,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useTheme} from '../config';
+import {useTheme, BaseColor} from '../config';
 import styles from './Style';
 import {useSelector} from 'react-redux';
 import TextInput from '../component/TextInput';
@@ -38,6 +38,12 @@ import AddEnquiry from '../Screens/AddEnquiry';
 import Header from '../component/Header/Header';
 import Search from '../component/Search';
 import EnquiryList from '../Screens/EnquiryList';
+import Filter from '../Screens/Filter';
+import SupplierHome from '../Screens/SupplierHome';
+import Agents from '../Screens/Agents';
+import Suppliers from '../Screens/Suppliers';
+import Buyers from '../Screens/Buyers';
+import UserDetails from '../Screens/UserDetails';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -61,7 +67,7 @@ function canTabBarVisibile(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
 
   switch (routeName) {
-    case 'Modal':
+    case 'test':
       return 'none';
     default:
       return 'flex';
@@ -91,7 +97,38 @@ const TopTabBarContainer = ({navigation}) => {
         />
         <View style={{flex: 2}}>
           <ScrollView scrollEventThrottle={8}>
-            <Text textAlign="center">We Need Show Enquiry Details</Text>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption1 grayColor>
+                Count & Blend
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                42s HTR 45% Bamboo 55% Cotton Compact
+              </Text>
+            </View>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption2 grayColor>
+                Color
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                BC22GR511908
+              </Text>
+            </View>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption2 grayColor>
+                Shade
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                Cerulean Melange
+              </Text>
+            </View>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption2 grayColor>
+                Quantity
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                45 Kgs
+              </Text>
+            </View>
           </ScrollView>
         </View>
         <View style={{flex: 8}}>
@@ -128,7 +165,14 @@ const AgentTopTabBarContainer = ({navigation}) => {
   return (
     <>
       <View style={{flex: 1, backgroundColor: colors.background}}>
-        <Header title="Enquiry & RFQ" style={{borderColor: colors.border}} />
+        <Header
+          title="Enquiry & RFQ"
+          style={{borderColor: colors.border}}
+          renderRight={() => (
+            <Icon name="funnel-outline" color={colors.primary} size={20} />
+          )}
+          onPressRight={() => navigation.navigate('Filter')}
+        />
         <Search />
         <View style={{flex: 8}}>
           <AgentTopTabBar />
@@ -183,8 +227,8 @@ const AgentTopTabBar = () => {
           backgroundColor: colors.primary,
         },
       }}>
-      <AgentTopTab.Screen name="Enquiry List" component={EnquiryList} />
-      <AgentTopTab.Screen name="Sent RFQ" component={SentRFQ} />
+      <AgentTopTab.Screen name="Enquiry" component={RFQs} />
+      <AgentTopTab.Screen name="RFQ" component={SentRFQ} />
     </AgentTopTab.Navigator>
   );
 };
@@ -207,35 +251,60 @@ function ProfileStackScreen() {
 
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator initialRouteName={'HomeStack'}>
-      <HomeStack.Screen
-        name="Modal"
-        component={TopTabBarContainer}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name="HomeStack"
-        component={Home}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name="Enquiry"
-        component={Enquiry}
-        options={{headerShown: false}}
-      />
+    <HomeStack.Navigator
+      initialRouteName={'HomeStack'}
+      screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="Modal" component={TopTabBarContainer} />
+      <HomeStack.Screen name="HomeStack" component={Home} />
+      <HomeStack.Screen name="Enquiry" component={Enquiry} />
+      <HomeStack.Screen name="Filter" component={Filter} />
       <HomeStack.Screen
         name="AddEnquiry"
         component={AddEnquiry}
-        options={{
-          headerShown: false,
-          // animation: 'fade',
-          // contentStyle: {
-          //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          // },
-          // presentation: 'transparentModal',
-          // gestureEnabled: false,
-        }}
+        options={
+          {
+            // animation: 'fade',
+            // contentStyle: {
+            //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            // },
+            // presentation: 'transparentModal',
+            // gestureEnabled: false,
+          }
+        }
       />
+    </HomeStack.Navigator>
+  );
+}
+
+function AgentsScreen() {
+  return (
+    <HomeStack.Navigator
+      initialRouteName={'Agents'}
+      screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="Agents" component={Agents} />
+      <HomeStack.Screen name="UserDetails" component={UserDetails} />
+    </HomeStack.Navigator>
+  );
+}
+
+function BuyersScreen() {
+  return (
+    <HomeStack.Navigator
+      initialRouteName={'Buyers'}
+      screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="Buyers" component={Buyers} />
+      <HomeStack.Screen name="UserDetails" component={UserDetails} />
+    </HomeStack.Navigator>
+  );
+}
+
+function SupplierScreen() {
+  return (
+    <HomeStack.Navigator
+      initialRouteName={'Suppliers'}
+      screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="Suppliers" component={Suppliers} />
+      <HomeStack.Screen name="UserDetails" component={UserDetails} />
     </HomeStack.Navigator>
   );
 }
@@ -245,12 +314,9 @@ function AgentStackScreen() {
     <AgentStack.Navigator
       initialRouteName={'AgentHome'}
       screenOptions={{headerShown: false}}>
-      <AgentStack.Screen
-        name="Modal"
-        component={TopTabBarContainer}
-        options={{headerShown: false}}
-      />
+      <HomeStack.Screen name="Modal" component={TopTabBarContainer} />
       <AgentStack.Screen name="CreateRFQ" component={CreateRFQ} />
+      <AgentStack.Screen name="Filter" component={Filter} />
       <AgentStack.Screen name="AgentHome" component={AgentTopTabBarContainer} />
       <AgentStack.Screen name="RFQDetails" component={RFQDetails} />
     </AgentStack.Navigator>
@@ -260,9 +326,10 @@ function AgentStackScreen() {
 function SupplierStackScreen() {
   return (
     <SupplierStack.Navigator
-      initialRouteName={'RFQs'}
+      initialRouteName={'SupplierHome'}
       screenOptions={{headerShown: false}}>
-      <SupplierStack.Screen name="RFQs" component={RFQs} />
+      <SupplierStack.Screen name="Filter" component={Filter} />
+      <SupplierStack.Screen name="SupplierHome" component={SupplierHome} />
       <SupplierStack.Screen name="RFQDetails" component={RFQDetails} />
     </SupplierStack.Navigator>
   );
@@ -406,6 +473,7 @@ export const BuyerBottomTabs = () => {
     <BuyerBottomTab.Navigator
       initialRouteName="Home"
       screenOptions={({route}) => ({
+        headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
           // ...styles.tabBarStyle,
@@ -430,15 +498,15 @@ export const BuyerBottomTabs = () => {
                 color={getColor(focused, colors)}
               />
               <Text style={{color: getColor(focused), fontSize: 12}}>
-                Enquiry
+                Enquiries
               </Text>
             </View>
           ),
         })}
       />
       <BuyerBottomTab.Screen
-        name="Agents"
-        component={Agent}
+        name="Agent"
+        component={AgentsScreen}
         options={{
           tabBarIcon: ({focused, size}) => (
             <View style={styles.icon}>
@@ -485,6 +553,7 @@ export const AgentBottomTabs = () => {
       initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarShowLabel: false,
+        headerShown: false,
         tabBarStyle: {
           // ...styles.tabBarStyle,
           ...styles.shdow,
@@ -507,14 +576,16 @@ export const AgentBottomTabs = () => {
                 size={size}
                 color={getColor(focused, colors)}
               />
-              <Text style={{color: getColor(focused), fontSize: 12}}>RFQs</Text>
+              <Text style={{color: getColor(focused), fontSize: 12}}>
+                Enquiries
+              </Text>
             </View>
           ),
         })}
       />
-      <BuyerBottomTab.Screen
-        name="Agents"
-        component={CreateRFQ}
+      <AgentBottomTab.Screen
+        name="Buyer"
+        component={BuyersScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused, size}) => (
@@ -525,7 +596,7 @@ export const AgentBottomTabs = () => {
                 color={getColor(focused)}
               />
               <Text style={{color: getColor(focused), fontSize: 12}}>
-                Agents
+                Buyers
               </Text>
             </View>
           ),
@@ -533,7 +604,7 @@ export const AgentBottomTabs = () => {
       />
       <AgentBottomTab.Screen
         name="Supplier"
-        component={Agent}
+        component={SupplierScreen}
         options={{
           tabBarIcon: ({focused, size}) => (
             <View style={styles.icon}>
@@ -543,7 +614,7 @@ export const AgentBottomTabs = () => {
                 color={getColor(focused)}
               />
               <Text style={{color: getColor(focused), fontSize: 12}}>
-                Supplier
+                Suppliers
               </Text>
             </View>
           ),
@@ -579,6 +650,7 @@ export const SupplierBottomTabs = () => {
       initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarShowLabel: false,
+        headerShown: false,
         tabBarStyle: {
           // ...styles.tabBarStyle,
           ...styles.shdow,
@@ -602,15 +674,15 @@ export const SupplierBottomTabs = () => {
                 color={getColor(focused, colors)}
               />
               <Text style={{color: getColor(focused), fontSize: 12}}>
-                Enquiry
+                Enquiries
               </Text>
             </View>
           ),
         })}
       />
       <SupplierBottomTab.Screen
-        name="Agents"
-        component={Agent}
+        name="Agent"
+        component={AgentsScreen}
         options={{
           tabBarIcon: ({focused, size}) => (
             <View style={styles.icon}>

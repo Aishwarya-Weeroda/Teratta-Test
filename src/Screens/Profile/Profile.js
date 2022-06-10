@@ -32,7 +32,7 @@ export default function Profile({navigation}) {
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header
-        title="profile"
+        title="Profile"
         renderRight={() => {
           return (
             <Icon name="notifications-outline" size={16} color={colors.text} />
@@ -61,7 +61,7 @@ export default function Profile({navigation}) {
               onPress={() => {
                 navigation.navigate('ProfileEdit');
               }}>
-              <Text style={{color: colors.text}}>edit profile</Text>
+              <Text style={{color: colors.text}}>Edit Profile</Text>
               <Icon
                 name="chevron-forward"
                 size={18}
@@ -77,7 +77,7 @@ export default function Profile({navigation}) {
               onPress={() => {
                 navigation.navigate('ChangePassword');
               }}>
-              <Text style={{color: colors.text}}>change password</Text>
+              <Text style={{color: colors.text}}>Change Password</Text>
               <Icon
                 name="chevron-forward"
                 size={18}
@@ -91,7 +91,7 @@ export default function Profile({navigation}) {
                 {borderBottomColor: colors.border, borderBottomWidth: 1},
               ]}
               onPress={() => navigation.navigate('ContactUs')}>
-              <Text style={{color: colors.text}}>contact_us</Text>
+              <Text style={{color: colors.text}}>Contact Us</Text>
               <Icon
                 name="chevron-forward"
                 size={18}
@@ -107,7 +107,7 @@ export default function Profile({navigation}) {
               onPress={() => {
                 navigation.navigate('AboutUs');
               }}>
-              <Text style={{color: colors.text}}>about us</Text>
+              <Text style={{color: colors.text}}>About Us</Text>
               <View
                 style={{
                   flexDirection: 'row',

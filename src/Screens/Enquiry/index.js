@@ -22,17 +22,14 @@ export default function Messages({navigation}) {
         {
           id: 1,
           email: 'test1@royal.com',
-          // selected: true,
         },
         {
           id: 2,
           email: 'test2@royal.com',
-          // selected: true,
         },
         {
           id: 3,
           email: 'test3@royal.com',
-          // selected: true,
         },
       ],
     },
@@ -47,7 +44,6 @@ export default function Messages({navigation}) {
         {
           id: 2,
           email: 'test2@shanmugam.com',
-          // selected: true,
         },
         {
           id: 3,
@@ -299,7 +295,7 @@ export default function Messages({navigation}) {
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={[colors.primary, colors.secondary]}>
-            <Text style={styles.loginTxt}>Send Enquiry</Text>
+            <Text style={styles.loginTxt}>Add Enquiry</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

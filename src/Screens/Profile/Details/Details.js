@@ -20,6 +20,15 @@ const BaseColor = {
   greenColor: '#58D68D',
 };
 
+const user = {
+  image:
+    'https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+  name: 'Pavithra Senthil',
+  rate: 5,
+  description: 'developer',
+  email: 'senthilperiyasamy.15@gmail.com',
+};
+
 export default function ProfileDetail(props) {
   const {colors} = useTheme();
   const {
@@ -99,11 +108,11 @@ ProfileDetail.propTypes = {
 };
 
 ProfileDetail.defaultProps = {
-  image: '',
-  textFirst: '',
-  textSecond: '',
+  image: user.image,
+  textFirst: user.name,
+  textSecond: user.description,
   icon: false,
-  point: '',
+  point: 5,
   style: {},
   styleLeft: {},
   styleThumb: {},

@@ -353,13 +353,13 @@ export default function CreateRFQ({navigation}) {
         </View>
       </SafeAreaView>
       <View style={styles.loginBtnContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('AddRecipient')}>
+        <TouchableOpacity>
           <LinearGradient
             style={styles.loginBtn}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={[colors.primary, colors.secondary]}>
-            <Text style={styles.loginTxt}>Send RFQ</Text>
+            <Text style={styles.loginTxt}>Create RFQ</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

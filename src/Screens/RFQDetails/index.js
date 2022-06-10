@@ -144,7 +144,38 @@ export default function RFQDetails({navigation}) {
         enabled>
         <View style={{flex: 2}}>
           <ScrollView scrollEventThrottle={8}>
-            <Text textAlign="center">We Need Show Enquiry Details</Text>
+          <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption1 grayColor>
+                Count & Blend
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                42s HTR 45% Bamboo 55% Cotton Compact
+              </Text>
+            </View>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption2 grayColor>
+                Color
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                BC22GR511908
+              </Text>
+            </View>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption2 grayColor>
+                Shade
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                Cerulean Melange
+              </Text>
+            </View>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
+              <Text caption2 grayColor>
+                Quantity
+              </Text>
+              <Text footnote semibold style={{marginTop: 5}}>
+                45 Kgs
+              </Text>
+            </View>
           </ScrollView>
         </View>
         <SafeAreaView style={{flex: 8}} edges={['right', 'left']}>

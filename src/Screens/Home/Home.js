@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from '../../component/Accordion/Accordion';
 import {useTheme} from '../../config';
 import Header from '../../component/Header/Header';
+import Text from '../../component/Text';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateTab} from '../../Redux/Features/TopTabSlice';
 import Search from '../../component/Search';
@@ -50,7 +51,13 @@ export default function Home({navigation}) {
   };
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
-      <Header title="Enquiry" />
+      <Header
+        title="Enquiry"
+        renderRight={() => (
+          <Icon name="funnel-outline" color={colors.primary} size={20} />
+        )}
+        onPressRight={() => navigation.navigate('Filter')}
+      />
       <SafeAreaView style={{flex: 1}}>
         <ScrollView>
           <Search />
