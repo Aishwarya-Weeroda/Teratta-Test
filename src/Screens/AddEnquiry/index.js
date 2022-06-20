@@ -2,13 +2,12 @@ import React, {useEffect, useState} from 'react';
 import Text from '../../component/Text';
 import TextInput from '../../component/TextInput';
 import {TouchableOpacity, View} from 'react-native';
-import {useTheme, BaseColor} from '../../config';
+import {useTheme} from '../../config';
 import styles from './style';
 import Icon from 'react-native-vector-icons/Ionicons';
-import FontIcon from 'react-native-vector-icons/FontAwesome';
 import Voice from '@react-native-community/voice';
 
-export default function ChooseBusiness({navigation}) {
+export default function AddEnquiry({navigation}) {
   const {colors} = useTheme();
   /**
    *

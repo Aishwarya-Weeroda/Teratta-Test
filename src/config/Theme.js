@@ -30,7 +30,7 @@ const themeGreen = {
       accent: '#4A90A4',
       background: 'white',
       tabBg: '#fafaf9',
-      backgroundWhite: 'white',
+      backgroundWhite: '#FFFFFF',
       card: '#F5F5F5',
       text: '#212121',
       border: '#c7c7cc',

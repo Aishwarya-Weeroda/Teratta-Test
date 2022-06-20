@@ -64,63 +64,63 @@ jobs:
           --groups "$firebaseGroups" \
           --token "$firebaseToken"
   
-  # build-ios-adhoc:
-  #   runs-on: macOS-latest
-  #   steps:
-  #     - name: Getting the repo
-  #       uses: actions/checkout@v2
-  #     - name: Use Node.js
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 14.x
-  #     - name: Install React Native CLI
-  #       run: |
-  #         yarn global add react-native-cli
-  #     - name: Install yarn dependencies
-  #       run: |
-  #         yarn install
-  #     - name: Building bundle
-  #       run: |
-  #         yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
-  #     - name: Install pod dependencies
-  #       run: |
-  #         cd ios && pod install
-  #     - name: Update build number
-  #       run: |
-  #         cd ios
-  #         agvtool new-marketing-version 1.0.0
-  #         agvtool new-version -all ${{github.run_number}}
-  #     - name: Build ios
-  #       uses: yukiarrr/ios-build-action@v1.3.2
-  #       with:
-  #         project-path: ios/terata.xcodeproj
-  #         workspace-path: ios/terata.xcworkspace
-  #         team-id: ${{ secrets.TEAM_ID }}
-  #         p12-base64: ${{ secrets.P12_BASE64 }}
-  #         mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
-  #         code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
-  #         export-method: development
-  #         output-path: output/output.ipa
-  #         update-targets: terata
-  #         scheme: terata
-  #     - name: Upload Artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: artifact
-  #         path: output/output.ipa
+  build-ios-adhoc:
+    runs-on: macOS-latest
+    steps:
+      - name: Getting the repo
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install React Native CLI
+        run: |
+          yarn global add react-native-cli
+      - name: Install yarn dependencies
+        run: |
+          yarn install
+      - name: Building bundle
+        run: |
+          yarn react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install
+      - name: Update build number
+        run: |
+          cd ios
+          agvtool new-marketing-version 1.0.0
+          agvtool new-version -all ${{github.run_number}}
+      - name: Build ios
+        uses: yukiarrr/ios-build-action@v1.3.2
+        with:
+          project-path: ios/terata.xcodeproj
+          workspace-path: ios/terata.xcworkspace
+          team-id: ${{ secrets.TEAM_ID }}
+          p12-base64: ${{ secrets.P12_BASE64 }}
+          mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
+          code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
+          export-method: development
+          output-path: output/output.ipa
+          update-targets: terata
+          scheme: terata
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: output/output.ipa
           
-  # upload-ios:
-  #   needs: build-ios-adhoc
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: artifact
-  #     - name: upload artifact to Firebase App Distribution
-  #       uses: wzieba/Firebase-Distribution-Github-Action@v1
-  #       with:
-  #         appId: ${{secrets.FIREBASE_APP_ID_IOS}}
-  #         token: ${{secrets.FIREBASE_TOKEN}}
-  #         groups: ${{ secrets.FIREBASE_GROUP_DEV }}
-  #         file: output.ipa
+  upload-ios:
+    needs: build-ios-adhoc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID_IOS}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: ${{ secrets.FIREBASE_GROUP_DEV }}
+          file: output.ipa

@@ -1,8 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, ScrollView} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {BaseStyle, useTheme} from '../../config';
 import Text from '../../component/Text';
-import TextInput from '../../component/TextInput';
+import filter from 'lodash/filter';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../component/Header/Header';
@@ -10,46 +15,51 @@ import LinearGradient from 'react-native-linear-gradient';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import Voice from '@react-native-community/voice';
 import styles from './style';
+import EnquiryForm from '../EnquiryForm';
+import Agents from '../../data/Agents';
+import SelectAgents from './SelectAgents';
 
 export default function Messages({navigation}) {
   const {colors} = useTheme();
+
+  const enquiry = {
+    countBlend: null,
+    color: null,
+    shade: null,
+    quantity: null,
+  };
+  const [enquiryForms, setEnquiryForms] = useState([enquiry]);
 
   const datas = [
     {
       id: 1,
       org: 'Royal Yarns',
-      emails: [
-        {
-          id: 1,
-          email: 'test1@royal.com',
-        },
-        {
-          id: 2,
-          email: 'test2@royal.com',
-        },
-        {
-          id: 3,
-          email: 'test3@royal.com',
-        },
-      ],
+      selected: false,
     },
     {
       id: 2,
       org: 'Shanmugam Yarns',
-      emails: [
-        {
-          id: 1,
-          email: 'test1@shanmugam.com',
-        },
-        {
-          id: 2,
-          email: 'test2@shanmugam.com',
-        },
-        {
-          id: 3,
-          email: 'test3@shanmugam.com',
-        },
-      ],
+      selected: false,
+    },
+    {
+      id: 3,
+      org: 'Test Yarns',
+      selected: false,
+    },
+    {
+      id: 4,
+      org: 'Test1 Yarns',
+      selected: false,
+    },
+    {
+      id: 5,
+      org: 'Test2 Yarns',
+      selected: false,
+    },
+    {
+      id: 6,
+      org: 'Test3 Yarns',
+      selected: false,
     },
   ];
 
@@ -76,127 +86,138 @@ export default function Messages({navigation}) {
   const [shade, setShade] = useState('');
   const [quantity, setQuantity] = useState('');
   const [currentField, setCurrentField] = useState();
+  const [currentIdex, setCurrentindex] = useState();
+  const [isRecording, setRecording] = useState(false);
+  const [stopRecording, setStopRecording] = useState(false);
+  const [agentDatas, setAgentDatas] = useState(Agents);
   useEffect(() => {
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
 
-  const startRecordingBlend = async field => {
-    console.log('startRecordingBlend');
-    setCurrentField(field);
-    Voice.onSpeechResults = blendHandler;
-    setCountBlend('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (e) {
-      console.log('error', e);
-    }
-  };
-
-  const blendHandler = e => {
-    setCountBlend(e.value[0]);
-  };
-
-  const startRecordingColor = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = colorHandler;
-    setColor('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const colorHandler = e => {
-    setColor(e.value[0]);
-  };
-
-  const startRecordingShade = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = shadeHandler;
-    setShade('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const shadeHandler = e => {
-    setShade(e.value[0]);
-  };
-
-  const startRecordingQuantity = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = quantityHandler;
-    setQuantity('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const quantityHandler = e => {
-    setQuantity(e.value[0]);
-  };
-
-  const stopRecording = async () => {
-    setCurrentField('');
-    try {
-      await Voice.stop().then(console.log('stoped'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
   const onselect = (id, recipient) => {
     const newData = [...data];
     newData
-      .filter(item => item.id === id)
-      .map(item =>
-        item.emails
-          .filter(email => email.id === recipient.id)
-          .map(email => (email.selected = !email.selected)),
-      );
+      .filter(item => item.id === recipient.id)
+      .map(item => (item.selected = !item.selected));
     setData(newData);
   };
 
-  const renderRecipient = recipients => {
+  const renderRecipient = recipient => {
     return (
-      <View style={{flex: 1}} key={recipients.org}>
-        <TouchableOpacity>
-          <Text headline>{recipients.org}</Text>
-        </TouchableOpacity>
-        {recipients.emails?.map(recipient => (
-          <TouchableOpacity
-            key={recipient.id}
-            onPress={() => onselect(recipients.id, recipient)}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.checkBoxView}>
-                <Icon style={{marginRight: 5}} name="mail" size={15} />
-                <Text style={{color: 'grey'}}>{recipient.email}</Text>
-              </View>
-              <View style={styles.forgotBoxView}>
-                {recipient.selected && (
-                  <Icon
-                    name="checkmark-circle"
-                    color={colors.primary}
-                    size={17}
-                  />
-                )}
-              </View>
+      <View style={{flex: 1}} key={recipient.org}>
+        <TouchableOpacity
+          key={recipient.id}
+          onPress={() => onselect(recipient.id, recipient)}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={styles.checkBoxView}>
+              <Text>{recipient.org}</Text>
             </View>
-          </TouchableOpacity>
-        ))}
+            <View style={styles.forgotBoxView}>
+              {recipient.selected && (
+                <Icon
+                  name="checkmark-circle"
+                  color={colors.primary}
+                  size={17}
+                />
+              )}
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
+  };
+  const onRecordStart = () => {
+    setRecording(!isRecording);
+  };
+  const onRecordEnd = () => {
+    setRecording(false);
+  };
+  const AddForm = ({children, onPress}) => {
+    return (
+      <TouchableOpacity
+        style={[styles.shdow, styles.customBtn]}
+        onPress={onPress}>
+        <LinearGradient
+          style={styles.gradientStyle}
+          colors={[colors.primary, colors.secondary]}>
+          <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            {children}
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
+  const RecordingBtn = ({children}) => {
+    return (
+      <TouchableOpacity
+        style={[styles.shdow, styles.customBtn]}
+        onPress={onRecordStart}>
+        <LinearGradient
+          style={styles.gradientStyle}
+          colors={[colors.primary, colors.secondary]}>
+          <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            {children}
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
+  const addEnquiryForm = () => {
+    const newEnquiryForms = [...enquiryForms];
+    newEnquiryForms.push(enquiry);
+    setEnquiryForms(newEnquiryForms);
+  };
+  const onDelete = index => {
+    const newEnquiryForms = [...enquiryForms];
+    newEnquiryForms.splice(index, 1);
+    setEnquiryForms(newEnquiryForms);
+  };
+
+  const onChildPress = (item, parentId) => {
+    const newAgentDatas = [...agentDatas];
+    newAgentDatas
+      .filter(agent => agent.id === parentId)
+      .map(agent => {
+        agent.agents
+          .filter(user => user.id === item.id)
+          .map(user => (user.selected = !user.selected));
+        const selectedCount = filter(agent.agents, function (o) {
+          return o.selected;
+        });
+        if (selectedCount.length === agent.agents.length) {
+          agent.selected = true;
+          agent.partialSeclection = false;
+        } else if (selectedCount.length > 0) {
+          agent.selected = false;
+          agent.partialSeclection = true;
+        } else {
+          agent.partialSeclection = false;
+          agent.selected = false;
+        }
+      });
+    setAgentDatas(newAgentDatas);
+  };
+
+  const onAccPress = item => {
+    const newAgentDatas = [...agentDatas];
+    newAgentDatas
+      .filter(agent => agent.id === item.id)
+      .map(agent => {
+        if (item.selected) {
+          agent.selected = false;
+          return agent.agents.map(user => (user.selected = false));
+        } else if (!item.selected || item.partialSeclection) {
+          agent.selected = true;
+          return agent.agents.map(user => (user.selected = true));
+        }
+      });
+    setAgentDatas(newAgentDatas);
   };
 
   return (
@@ -216,80 +237,72 @@ export default function Messages({navigation}) {
           navigation.goBack();
         }}
       />
-      <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
-        <View style={{flex: 4}}>
-          <ScrollView scrollEventThrottle={8}>
-            <View style={[styles.content]}>
-              <View style={styles.wrapContent}>
-                <View style={styles.contentTitle}>
-                  <Text headline>Count & Blend</Text>
-                </View>
-                <TextInput
-                  placeholder="Enter Count & Blend"
-                  icon={
-                    currentField !== 'blend'
-                      ? getIcon('blend', startRecordingBlend)
-                      : fontIcon
-                  }
-                  value={countBlend}
-                  onChangeText={text => setCountBlend(text)}
+      <KeyboardAvoidingView
+        style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
+        behavior="padding"
+        enabled
+        keyboardVerticalOffset={100}>
+        <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
+          <View style={{flex: 1}}>
+            <ScrollView>
+              {enquiryForms.map((enquiryForm, index) => (
+                <EnquiryForm
+                  key={index}
+                  canDelete={enquiryForms.length > 1}
+                  index={index}
+                  onDelete={onDelete}
+                  onFocus={setCurrentindex}
+                  isRecording={currentIdex === index && isRecording}
                 />
-                <View style={styles.contentTitle}>
-                  <Text headline>Color</Text>
+              ))}
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{flex: 0.5, alignItems: 'flex-end', marginRight: 15}}>
+                  <TouchableOpacity onPress={onRecordStart}>
+                    <Icon
+                      name={
+                        isRecording
+                          ? 'stop-circle-outline'
+                          : 'mic-circle-outline'
+                      }
+                      size={40}
+                      color={colors.primary}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <TextInput
-                  placeholder="Enter Color"
-                  icon={
-                    currentField !== 'color'
-                      ? getIcon('color', startRecordingColor)
-                      : fontIcon
-                  }
-                  value={color}
-                  onChangeText={text => setColor(text)}
-                />
-                <View style={styles.contentTitle}>
-                  <Text headline>Shade</Text>
+                <View style={{flex: 0.5, alignItems: 'flex-start'}}>
+                  <TouchableOpacity onPress={addEnquiryForm}>
+                    <Icon
+                      name="add-circle-outline"
+                      size={40}
+                      color={colors.primary}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <TextInput
-                  placeholder="Enter Shade"
-                  icon={
-                    currentField !== 'shade'
-                      ? getIcon('shade', startRecordingShade)
-                      : fontIcon
-                  }
-                  value={shade}
-                  onChangeText={text => setShade(text)}
-                />
-                <View style={styles.contentTitle}>
-                  <Text headline>Quantity</Text>
-                </View>
-                <TextInput
-                  placeholder="Enter Quantity"
-                  icon={
-                    currentField !== 'quantity'
-                      ? getIcon('quantity', startRecordingQuantity)
-                      : fontIcon
-                  }
-                  value={quantity}
-                  onChangeText={text => setQuantity(text)}
-                />
               </View>
-            </View>
-          </ScrollView>
-        </View>
-        <View style={[styles.contentTitle, {marginHorizontal: 10}]}>
-          <Text headline>Select Recipients</Text>
-        </View>
-        <View style={{flex: 3, marginHorizontal: 10, marginBottom: 20}}>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <ScrollView scrollEventThrottle={8}>
-              {data.map(recipient => renderRecipient(recipient))}
             </ScrollView>
           </View>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+      <View style={{padding: 3, maxHeight: '30%', marginBottom: 25}}>
+        <View style={[styles.contentTitle, {marginHorizontal: 10}]}>
+          <Text headline>Select Agents</Text>
         </View>
-      </SafeAreaView>
-      <View style={styles.loginBtnContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('AddRecipient')}>
+        <ScrollView scrollEventThrottle={8}>
+          {agentDatas.map((agentData, index) => (
+            <SelectAgents
+              onAccPress={onAccPress}
+              onChildPress={childItem => onChildPress(childItem, agentData.id)}
+              data={agentData}
+              key={agentData.id + index}
+            />
+          ))}
+        </ScrollView>
+      </View>
+      <View style={[styles.loginBtnContainer, styles.shdow]}>
+        <TouchableOpacity
+          style={{padding: 5}}
+          onPress={() => navigation.navigate('AddRecipient')}>
           <LinearGradient
             style={styles.loginBtn}
             start={{x: 0, y: 0}}

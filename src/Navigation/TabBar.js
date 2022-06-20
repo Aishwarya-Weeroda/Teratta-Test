@@ -106,7 +106,7 @@ const TopTabBarContainer = ({navigation}) => {
               </Text>
             </View>
             <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption2 grayColor>
+              <Text caption1 grayColor>
                 Color
               </Text>
               <Text footnote semibold style={{marginTop: 5}}>
@@ -114,7 +114,7 @@ const TopTabBarContainer = ({navigation}) => {
               </Text>
             </View>
             <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption2 grayColor>
+              <Text caption1 grayColor>
                 Shade
               </Text>
               <Text footnote semibold style={{marginTop: 5}}>
@@ -122,7 +122,7 @@ const TopTabBarContainer = ({navigation}) => {
               </Text>
             </View>
             <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption2 grayColor>
+              <Text caption1 grayColor>
                 Quantity
               </Text>
               <Text footnote semibold style={{marginTop: 5}}>

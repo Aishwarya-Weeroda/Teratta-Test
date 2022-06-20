@@ -26,7 +26,7 @@ export default StyleSheet.create({
     padding: 15,
     borderRadius: 5,
   },
-  loginBtnContainer: {alignItems: 'center', marginBottom: 10},
+  loginBtnContainer: {alignItems: 'center'},
   loginTxt: {
     color: '#fff',
     textAlign: 'center',
@@ -45,6 +45,18 @@ export default StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3.5,
     elevation: 10,
+  },
+  customBtn: {
+    margin: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gradientStyle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: 'hidden',
+    backgroundColor: '#e32f45',
   },
   contain: {
     flex: 1,
@@ -113,5 +125,44 @@ export default StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: 10,
     marginRight: 5,
+  },
+  accShdow: {
+    shadowColor: '#a8a29e',
+    shadowOffset: {
+      width: 1,
+      height: 5,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 3.5,
+    elevation: 10,
+  },
+  line: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+    borderColor: '#fecaca',
+  },
+  contentInforAction: {
+    marginLeft: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  lineWorkHours: {
+    flexDirection: 'row',
+    // alignItems: 'center',
+    paddingVertical: 10,
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+  },
+  textStyle: {
+    flex: 0.9,
+    flexDirection: 'row',
+    // alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  safeAreaView: {
+    flex: 1,
   },
 });
