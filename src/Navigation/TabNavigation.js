@@ -13,7 +13,7 @@ import Supplier from '../components/Supplier/Supplier';
 
 const Tabs = () => {
   const userState = useSelector(state => state.login);
-  switch (userState.userName) {
+  switch (userState.type) {
     case 'buyer':
       return <BuyerNavigator />;
     case 'agent':

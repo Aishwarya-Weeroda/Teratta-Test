@@ -8,13 +8,13 @@ import PropTypes from 'prop-types';
 import {useTheme} from '../../config';
 import {Users} from '../../data/Users';
 
-import {login} from '../../Redux/Features/LoginSlice';
+import {login, authenticate} from '../../Redux/Features/LoginSlice';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const {colors} = useTheme();
 
-  const [user, setUser] = useState({userName: '', password: ''});
+  const [user, setUser] = useState({userName: 'bvk-hr', password: 'pass1234'});
 
   const onChange = payload => {
     setUser(user => ({
@@ -24,11 +24,7 @@ const Login = ({navigation}) => {
   };
 
   const onPress = () => {
-    const usrObj = Users.filter(obj => obj.userName === user.userName);
-    console.log(usrObj);
-    if (usrObj.length > 0) {
-      dispatch(login({...user, ...usrObj[0]}));
-    }
+    dispatch(authenticate(user));
   };
 
   return (
@@ -56,6 +52,7 @@ const Login = ({navigation}) => {
               secureTextEntry={true}
               placeholder="Password"
               style={styles.input}
+              onChangeText={value => onChange({password: value})}
             />
           </View>
           <View style={styles.rowDir}>

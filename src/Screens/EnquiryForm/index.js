@@ -1,16 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {View, TextInput, TouchableOpacity} from 'react-native';
 import {styles} from './style';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Voice from '@react-native-community/voice';
-import {BaseStyle, useTheme} from '../../config';
+import {useTheme} from '../../config';
 
 const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
   const [countBlend, setCountBlend] = useState('');
@@ -32,7 +26,6 @@ const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
   }, []);
 
   useEffect(() => {
-    console.log('state changed', currentField);
     isRecording ? startRecording() : stopRecording();
   }, [isRecording]);
 
@@ -62,70 +55,6 @@ const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
         setQuantity(e.value[0]);
         return;
     }
-    // setCountBlend(e.value[0]);
-  };
-
-  const startRecordingBlend = async field => {
-    Voice.onSpeechResults = blendHandler;
-    setCountBlend('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (e) {
-      console.log('error', e);
-    }
-  };
-
-  const blendHandler = e => {
-    setCountBlend(e.value[0]);
-  };
-
-  const startRecordingColor = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = colorHandler;
-    setColor('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const colorHandler = e => {
-    setColor(e.value[0]);
-  };
-
-  const startRecordingShade = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = shadeHandler;
-    setShade('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const shadeHandler = e => {
-    setShade(e.value[0]);
-  };
-
-  const startRecordingQuantity = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = quantityHandler;
-    setQuantity('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const quantityHandler = e => {
-    setQuantity(e.value[0]);
   };
 
   const stopRecording = async () => {

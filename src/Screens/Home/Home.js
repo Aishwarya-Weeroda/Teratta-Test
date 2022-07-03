@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,10 +10,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from '../../component/Accordion/Accordion';
 import {useTheme} from '../../config';
 import Header from '../../component/Header/Header';
-import Text from '../../component/Text';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateTab} from '../../Redux/Features/TopTabSlice';
 import Search from '../../component/Search';
+import {getAttributes} from '../../Redux/Features/AttributesSlice';
 // import enquiryDetails from '../../data/EnquiryDetails';
 
 const styles = StyleSheet.create({
@@ -37,9 +37,14 @@ const styles = StyleSheet.create({
   },
 });
 export default function Home({navigation}) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAttributes());
+  }, []);
+
   const {colors} = useTheme();
   const enquiryDetails = useSelector(state => state.rfq.enquiryDetails);
-  const dispatch = useDispatch();
   const onBtnPress = (agents, currentAgent) => {
     dispatch(
       updateTab({

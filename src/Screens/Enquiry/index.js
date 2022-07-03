@@ -18,6 +18,7 @@ import styles from './style';
 import EnquiryForm from '../EnquiryForm';
 import Agents from '../../data/Agents';
 import SelectAgents from './SelectAgents';
+import AgentSelect from '../Receipient';
 
 export default function Messages({navigation}) {
   const {colors} = useTheme();
@@ -29,6 +30,7 @@ export default function Messages({navigation}) {
     quantity: null,
   };
   const [enquiryForms, setEnquiryForms] = useState([enquiry]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const datas = [
     {
@@ -222,6 +224,13 @@ export default function Messages({navigation}) {
 
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
+      <AgentSelect
+        isVisible={modalVisible}
+        onAccPress={onAccPress}
+        onChildPress={onChildPress}
+        data={agentDatas}
+        setModalVisible={setModalVisible}
+      />
       <Header
         title="Add Enquiry"
         renderLeft={() => {
@@ -284,25 +293,10 @@ export default function Messages({navigation}) {
           </View>
         </SafeAreaView>
       </KeyboardAvoidingView>
-      <View style={{padding: 3, maxHeight: '30%', marginBottom: 25}}>
-        <View style={[styles.contentTitle, {marginHorizontal: 10}]}>
-          <Text headline>Select Agents</Text>
-        </View>
-        <ScrollView scrollEventThrottle={8}>
-          {agentDatas.map((agentData, index) => (
-            <SelectAgents
-              onAccPress={onAccPress}
-              onChildPress={childItem => onChildPress(childItem, agentData.id)}
-              data={agentData}
-              key={agentData.id + index}
-            />
-          ))}
-        </ScrollView>
-      </View>
       <View style={[styles.loginBtnContainer, styles.shdow]}>
         <TouchableOpacity
           style={{padding: 5}}
-          onPress={() => navigation.navigate('AddRecipient')}>
+          onPress={() => setModalVisible(true)}>
           <LinearGradient
             style={styles.loginBtn}
             start={{x: 0, y: 0}}

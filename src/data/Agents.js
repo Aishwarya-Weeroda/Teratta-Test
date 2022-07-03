@@ -75,6 +75,12 @@ export default [
         email: 'agent3@abc.com',
         selected: false,
       },
+      {
+        id: 4,
+        name: 'ABC Yarns',
+        email: 'agent4@abc.com',
+        selected: false,
+      },
     ],
   },
   {
@@ -99,6 +105,44 @@ export default [
         id: 3,
         name: 'DEF Yarns',
         email: 'agent3@def.com',
+        selected: false,
+      },
+      {
+        id: 4,
+        name: 'DEF Yarns',
+        email: 'agent4@def.com',
+        selected: false,
+      },
+    ],
+  },
+  {
+    id: 5,
+    selected: false,
+    partialSeclection: false,
+    name: 'GHI Yarns',
+    agents: [
+      {
+        id: 1,
+        name: 'GHI Yarns',
+        email: 'agent1@ghi.com',
+        selected: false,
+      },
+      {
+        id: 2,
+        name: 'GHI Yarns',
+        email: 'agent2@ghi.com',
+        selected: false,
+      },
+      {
+        id: 3,
+        name: 'GHI Yarns',
+        email: 'agent3@ghi.com',
+        selected: false,
+      },
+      {
+        id: 4,
+        name: 'GHI Yarns',
+        email: 'agent4@ghi.com',
         selected: false,
       },
     ],

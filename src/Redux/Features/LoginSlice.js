@@ -1,7 +1,10 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import jwtDecode from 'jwt-decode';
+import {authApi} from '../Api/AuthApi';
 
 const initialState = {
   isLoggedIn: false,
+  token: '',
   userName: '',
   password: '',
   name: '',
@@ -9,6 +12,10 @@ const initialState = {
   role: '',
   type: '',
 };
+export const authenticate = createAsyncThunk(
+  'login/authenticate',
+  async (payload, thunkAPI) => authApi(payload),
+);
 
 export const loginSlice = createSlice({
   name: 'login',
@@ -25,6 +32,17 @@ export const loginSlice = createSlice({
       return {
         ...initialState,
       };
+    },
+  },
+  extraReducers: {
+    [authenticate.fulfilled]: (state, {payload}) => {
+      state.token = payload.access_token;
+      var decoded = jwtDecode(payload.access_token);
+      state.loading = false;
+      state.email = decoded.email;
+      state.name = `${decoded.firstName} ${decoded.firstName}`;
+      state.type = decoded?.type?.toLowerCase();
+      state.isLoggedIn = true;
     },
   },
 });
