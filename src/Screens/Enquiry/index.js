@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import {BaseStyle, useTheme} from '../../config';
 import Text from '../../component/Text';
 import filter from 'lodash/filter';
@@ -12,182 +13,54 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../component/Header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-// import Icon from 'react-native-vector-icons/Ionicons';
 import Voice from '@react-native-community/voice';
 import styles from './style';
 import EnquiryForm from '../EnquiryForm';
-import Agents from '../../data/Agents';
-import SelectAgents from './SelectAgents';
 import AgentSelect from '../Receipient';
+import {getAgents} from '../../Redux/Features/AgentsSlice';
+import {addEnquiries} from '../../Redux/Features/EnquirySlice';
 
 export default function Messages({navigation}) {
   const {colors} = useTheme();
-
-  const enquiry = {
-    countBlend: null,
-    color: null,
-    shade: null,
-    quantity: null,
-  };
-  const [enquiryForms, setEnquiryForms] = useState([enquiry]);
+  const attributes = useSelector(state => state.attributes.attributes);
+  const dispatch = useDispatch();
+  const [enquires, setEnquires] = useState([attributes]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const datas = [
-    {
-      id: 1,
-      org: 'Royal Yarns',
-      selected: false,
-    },
-    {
-      id: 2,
-      org: 'Shanmugam Yarns',
-      selected: false,
-    },
-    {
-      id: 3,
-      org: 'Test Yarns',
-      selected: false,
-    },
-    {
-      id: 4,
-      org: 'Test1 Yarns',
-      selected: false,
-    },
-    {
-      id: 5,
-      org: 'Test2 Yarns',
-      selected: false,
-    },
-    {
-      id: 6,
-      org: 'Test3 Yarns',
-      selected: false,
-    },
-  ];
-
-  const [data, setData] = useState(datas);
-
-  const getIcon = (field, method) => (
-    <TouchableOpacity onPress={() => method(field)}>
-      <Icon name="mic-sharp" size={20} color={colors.text} enableRTL={true} />
-    </TouchableOpacity>
-  );
-
-  const fontIcon = (
-    <TouchableOpacity onPress={() => stopRecording()}>
-      <Icon
-        name="stop-circle-outline"
-        size={20}
-        color={colors.primary}
-        enableRTL={true}
-      />
-    </TouchableOpacity>
-  );
-  const [countBlend, setCountBlend] = useState('');
-  const [color, setColor] = useState('');
-  const [shade, setShade] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [currentField, setCurrentField] = useState();
   const [currentIdex, setCurrentindex] = useState();
   const [isRecording, setRecording] = useState(false);
-  const [stopRecording, setStopRecording] = useState(false);
-  const [agentDatas, setAgentDatas] = useState(Agents);
+  const [agentDatas, setAgentDatas] = useState(
+    useSelector(state => state.agents.agents),
+  );
   useEffect(() => {
+    dispatch(getAgents());
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
 
-  const onselect = (id, recipient) => {
-    const newData = [...data];
-    newData
-      .filter(item => item.id === recipient.id)
-      .map(item => (item.selected = !item.selected));
-    setData(newData);
-  };
-
-  const renderRecipient = recipient => {
-    return (
-      <View style={{flex: 1}} key={recipient.org}>
-        <TouchableOpacity
-          key={recipient.id}
-          onPress={() => onselect(recipient.id, recipient)}>
-          <View style={{flexDirection: 'row'}}>
-            <View style={styles.checkBoxView}>
-              <Text>{recipient.org}</Text>
-            </View>
-            <View style={styles.forgotBoxView}>
-              {recipient.selected && (
-                <Icon
-                  name="checkmark-circle"
-                  color={colors.primary}
-                  size={17}
-                />
-              )}
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
   const onRecordStart = () => {
     setRecording(!isRecording);
   };
-  const onRecordEnd = () => {
-    setRecording(false);
-  };
-  const AddForm = ({children, onPress}) => {
-    return (
-      <TouchableOpacity
-        style={[styles.shdow, styles.customBtn]}
-        onPress={onPress}>
-        <LinearGradient
-          style={styles.gradientStyle}
-          colors={[colors.primary, colors.secondary]}>
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            {children}
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    );
-  };
-
-  const RecordingBtn = ({children}) => {
-    return (
-      <TouchableOpacity
-        style={[styles.shdow, styles.customBtn]}
-        onPress={onRecordStart}>
-        <LinearGradient
-          style={styles.gradientStyle}
-          colors={[colors.primary, colors.secondary]}>
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            {children}
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    );
-  };
 
   const addEnquiryForm = () => {
-    const newEnquiryForms = [...enquiryForms];
-    newEnquiryForms.push(enquiry);
-    setEnquiryForms(newEnquiryForms);
+    const newEnquiryForms = [...enquires];
+    newEnquiryForms.push(attributes);
+    setEnquires(newEnquiryForms);
   };
   const onDelete = index => {
-    const newEnquiryForms = [...enquiryForms];
+    const newEnquiryForms = [...enquires];
     newEnquiryForms.splice(index, 1);
-    setEnquiryForms(newEnquiryForms);
+    setEnquires(newEnquiryForms);
   };
 
   const onChildPress = (item, parentId) => {
-    const newAgentDatas = [...agentDatas];
+    const newAgentDatas = JSON.parse(JSON.stringify(agentDatas));
     newAgentDatas
       .filter(agent => agent.id === parentId)
       .map(agent => {
         agent.agents
-          .filter(user => user.id === item.id)
+          .filter(user => user._id === item._id)
           .map(user => (user.selected = !user.selected));
         const selectedCount = filter(agent.agents, function (o) {
           return o.selected;
@@ -207,7 +80,7 @@ export default function Messages({navigation}) {
   };
 
   const onAccPress = item => {
-    const newAgentDatas = [...agentDatas];
+    const newAgentDatas = JSON.parse(JSON.stringify(agentDatas));
     newAgentDatas
       .filter(agent => agent.id === item.id)
       .map(agent => {
@@ -222,6 +95,43 @@ export default function Messages({navigation}) {
     setAgentDatas(newAgentDatas);
   };
 
+  const onChangeText = (id, value, rootIndex, childIndex) => {
+    const newData = JSON.parse(JSON.stringify(enquires));
+    newData[rootIndex][childIndex].value = value;
+    setEnquires(newData);
+  };
+
+  const getRecepients = () =>
+    agentDatas
+      .filter(agentData => agentData.selected || agentData.partialSeclection)
+      .map(data =>
+        data.agents
+          .filter(agent => agent.selected)
+          .map(agent => ({
+            userId: agent.userId,
+            email: agent.email,
+            userName: agent.userName,
+          })),
+      );
+
+  const onSubmit = () => {
+    const recepients = getRecepients();
+    const data = {
+      name: 'My First API Enquiry Initiated',
+      description: 'Enquiry description',
+      attributes: enquires,
+      agents: [
+        {
+          '6b1d6e0d-4b63-4daf-a441-d5d97cb981c8': recepients,
+        },
+      ],
+    };
+    if (recepients.length > 0) {
+      dispatch(addEnquiries(data));
+    }
+    setModalVisible(false);
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <AgentSelect
@@ -230,6 +140,7 @@ export default function Messages({navigation}) {
         onChildPress={onChildPress}
         data={agentDatas}
         setModalVisible={setModalVisible}
+        onSubmit={onSubmit}
       />
       <Header
         title="Add Enquiry"
@@ -254,13 +165,17 @@ export default function Messages({navigation}) {
         <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
           <View style={{flex: 1}}>
             <ScrollView>
-              {enquiryForms.map((enquiryForm, index) => (
+              {enquires.map((enquire, index) => (
                 <EnquiryForm
                   key={index}
-                  canDelete={enquiryForms.length > 1}
+                  fields={enquire}
+                  canDelete={enquires.length > 1}
                   index={index}
-                  onDelete={onDelete}
+                  onDelete={() => onDelete(index)}
                   onFocus={setCurrentindex}
+                  onChangeText={(id, value, childIdx) =>
+                    onChangeText(id, value, index, childIdx)
+                  }
                   isRecording={currentIdex === index && isRecording}
                 />
               ))}

@@ -9,15 +9,15 @@ import Button from '../../component/Button';
 
 export default function AgentSelect(props) {
   const {colors} = useTheme();
-  const {style, isVisible, data, onAccPress, onChildPress, setModalVisible} =
-    props;
-  /**
-   * on Apply change sort
-   */
-  const onApply = () => {
-    setModalVisible(false);
-  };
-
+  const {
+    style,
+    isVisible,
+    data,
+    onAccPress,
+    onChildPress,
+    setModalVisible,
+    onSubmit,
+  } = props;
   return (
     <View
       style={[
@@ -57,7 +57,7 @@ export default function AgentSelect(props) {
                 marginBottom: 20,
                 backgroundColor: colors.primary,
               }}
-              onPress={() => onApply()}>
+              onPress={onSubmit}>
               Send
             </Button>
           </View>

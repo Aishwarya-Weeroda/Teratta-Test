@@ -75,3 +75,21 @@ export const delay = ms => {
     }, ms);
   });
 };
+
+export const groupBy = (array, key) =>
+  array.reduce(function (r, a) {
+    r[a[key]] = r[a[key]] || [];
+    r[a[key]].push(a);
+    return r;
+  }, Object.create(null));
+
+export const groupAgents = (array, gKey) => {
+  const data = groupBy(array, gKey);
+  return Object.keys(data).map((key, index) => ({
+    id: index,
+    selected: false,
+    partialSeclection: false,
+    name: key,
+    agents: data[key],
+  }));
+};

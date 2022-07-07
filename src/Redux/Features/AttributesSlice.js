@@ -1,13 +1,13 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {getAttributesApi} from '../Api/AttributesApi';
+import {http, thunkHandler} from '../Api/Api';
 
 const initialState = {
   attributes: [],
 };
-export const getAttributes = createAsyncThunk(
-  'attributes/get',
-  async thunkAPI => getAttributesApi(),
-);
+
+export const getAttributes = createAsyncThunk('attributes/get', thunkAPI => {
+  return thunkHandler(http.get('/attributes'), thunkAPI);
+});
 
 export const attributesSlice = createSlice({
   name: 'attributes',

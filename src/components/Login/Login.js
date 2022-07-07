@@ -25,6 +25,7 @@ const Login = ({navigation}) => {
 
   const onPress = () => {
     dispatch(authenticate(user));
+    // dispatch(login(Users[0]));
   };
 
   return (

@@ -21,9 +21,6 @@ const enableExperimental = () => {
 export default function SelectAgents({onAccPress, onChildPress, data}) {
   const [collapseHour, setCollapseHour] = useState(true);
   const {colors} = useTheme();
-  /**
-   * collapse open time
-   */
   const onCollapse = () => {
     enableExperimental();
     setCollapseHour(!collapseHour);
@@ -92,7 +89,7 @@ export default function SelectAgents({onAccPress, onChildPress, data}) {
           return (
             <View
               style={[styles.lineWorkHours, {borderColor: colors.border}]}
-              key={item.name + index}>
+              key={item.orgName + index}>
               <View style={styles.textStyle}>
                 <Text style={{color: colors.text}} numberOfLines={1}>
                   {item.email}

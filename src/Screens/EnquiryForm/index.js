@@ -6,16 +6,24 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Voice from '@react-native-community/voice';
 import {useTheme} from '../../config';
 
-const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
-  const [countBlend, setCountBlend] = useState('');
-  const [color, setColor] = useState('');
-  const [shade, setShade] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [currentField, setCurrentFieldValue] = useState();
+const EnquiryForm = ({
+  onDelete,
+  index,
+  canDelete,
+  isRecording,
+  fields,
+  onChangeText,
+  onFocus,
+}) => {
+  const currentEle = {
+    id: null,
+    index: null,
+  };
+  const [currentElement, setCurrentElement] = useState(currentEle);
   const {colors} = useTheme();
 
-  const setCurrentField = field => {
-    setCurrentFieldValue(field);
+  const setFocus = currentEle => {
+    setCurrentElement(currentEle);
     onFocus(index);
   };
 
@@ -31,7 +39,6 @@ const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
 
   const startRecording = async () => {
     Voice.onSpeechResults = resultHandler;
-    // setCountBlend('');
     try {
       await Voice.destroy().then(Voice.removeAllListeners);
       await Voice.start('en-US').then(console.log('started'));
@@ -41,24 +48,10 @@ const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
   };
 
   const resultHandler = e => {
-    switch (currentField) {
-      case 'countBlend':
-        setCountBlend(e.value[0]);
-        return;
-      case 'color':
-        setColor(e.value[0]);
-        return;
-      case 'shade':
-        setShade(e.value[0]);
-        return;
-      case 'quantity':
-        setQuantity(e.value[0]);
-        return;
-    }
+    onChangeText(currentElement.id, e.value[0], currentElement.index);
   };
 
   const stopRecording = async () => {
-    setCurrentField('');
     try {
       await Voice.stop().then(console.log('stoped'));
     } catch (error) {
@@ -66,72 +59,41 @@ const EnquiryForm = ({onDelete, index, canDelete, isRecording, onFocus}) => {
     }
   };
 
-  return (
-    <>
-      <View
-        style={[
-          styles.inputContainer,
-          styles.shdow,
-          {backgroundColor: colors.backgroundWhite},
-        ]}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: canDelete ? 0.92 : 1, alignItems: 'flex-start'}}>
-            <TextInput
-              placeholder="Enter Count & Blend"
-              style={styles.input}
-              value={countBlend}
-              onChangeText={text => setCountBlend(text)}
-              onFocus={() => setCurrentField('countBlend')}
-            />
-          </View>
-          {canDelete && (
-            <View
-              style={{
-                flex: 0.08,
-                alignItems: 'flex-end',
-                margin: -7,
-              }}>
-              <TouchableOpacity onPress={() => onDelete(index)}>
-                <Icon name="trash" color="#e11d48" size={20} />
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: canDelete ? 0.96 : 1, alignItems: 'flex-start'}}>
-            <TextInput
-              placeholder="Enter Color"
-              style={styles.input}
-              value={color}
-              onChangeText={text => setColor(text)}
-              onFocus={() => setCurrentField('color')}
-            />
-          </View>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: canDelete ? 0.96 : 1, alignItems: 'flex-start'}}>
-            <TextInput
-              placeholder="Enter Shade"
-              style={styles.input}
-              value={shade}
-              onChangeText={text => setShade(text)}
-              onFocus={() => setCurrentField('shade')}
-            />
-          </View>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: canDelete ? 0.96 : 1, alignItems: 'flex-start'}}>
-            <TextInput
-              placeholder="Enter Quantity"
-              style={styles.input}
-              value={quantity}
-              onChangeText={text => setQuantity(text)}
-              onFocus={() => setCurrentField('quantity')}
-            />
-          </View>
-        </View>
+  const renderInput = (field, childIndex) => (
+    <View style={{flexDirection: 'row'}} key={index + childIndex}>
+      <View style={{flex: canDelete ? 0.96 : 1, alignItems: 'flex-start'}}>
+        <TextInput
+          placeholder={field.name}
+          style={styles.input}
+          value={field.value}
+          onChangeText={text => onChangeText(field.id, text, childIndex)}
+          onFocus={() => setFocus({id: field.id, index: childIndex})}
+        />
       </View>
-    </>
+      {canDelete && childIndex === 0 && (
+        <View
+          style={{
+            flex: 0.08,
+            alignItems: 'flex-end',
+            margin: -7,
+          }}>
+          <TouchableOpacity onPress={onDelete}>
+            <Icon name="trash" color="#e11d48" size={20} />
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+
+  return (
+    <View
+      style={[
+        styles.inputContainer,
+        styles.shdow,
+        {backgroundColor: colors.backgroundWhite},
+      ]}>
+      {fields.map((field, childIndex) => renderInput(field, childIndex))}
+    </View>
   );
 };
 

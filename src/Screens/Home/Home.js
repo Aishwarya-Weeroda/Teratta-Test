@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateTab} from '../../Redux/Features/TopTabSlice';
 import Search from '../../component/Search';
 import {getAttributes} from '../../Redux/Features/AttributesSlice';
-// import enquiryDetails from '../../data/EnquiryDetails';
+import {getEnquiries} from '../../Redux/Features/EnquirySlice';
 
 const styles = StyleSheet.create({
   menuIcon: {
@@ -40,6 +40,7 @@ export default function Home({navigation}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(getEnquiries());
     dispatch(getAttributes());
   }, []);
 

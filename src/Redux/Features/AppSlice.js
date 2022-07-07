@@ -7,7 +7,9 @@ import {
 
 const initialState = {
   loading: false,
-  error: '',
+  errorMsg: '',
+  errorTitle: '',
+  errorCode: '',
 };
 
 const appSlice = createSlice({
@@ -18,8 +20,12 @@ const appSlice = createSlice({
     builder.addMatcher(isPending, (state, action) => {
       state.loading = true;
     });
-    builder.addMatcher(isRejected, (state, action) => {
+    builder.addMatcher(isRejected, (state, {payload}) => {
+      console.log('action', payload);
       state.loading = false;
+      state.errorMsg = payload.statusDesc;
+      state.errorTitle = payload.statusTitle;
+      state.errorCode = payload.statusCode;
     });
     builder.addMatcher(isFulfilled, (state, action) => {
       state.loading = false;

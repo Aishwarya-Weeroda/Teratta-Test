@@ -9,7 +9,6 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.35,
     shadowRadius: 3.5,
-    elevation: 10,
   },
   cardShdow: {
     shadowColor: '#a8a29e',
@@ -26,6 +25,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginTop: 5,
     borderColor: '#fecaca',
+    elevation: 5,
   },
   contentInforAction: {
     marginLeft: 10,

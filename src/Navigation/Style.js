@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 export default StyleSheet.create({
   shdow: {
@@ -24,7 +24,6 @@ export default StyleSheet.create({
     backgroundColor: '#e32f45',
   },
   tabBarStyle: {
-    // position: 'absolute',
     bottom: 25,
     left: 20,
     right: 20,
@@ -33,11 +32,13 @@ export default StyleSheet.create({
     height: 90,
   },
   topTabBarStyle: {
-    // backgroundColor: 'red',
     elevation: 2,
-    // borderRadius: 15,
   },
-  icon: {alignItems: 'center', justifyContent: 'center', top: 10},
+  icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: Platform.OS === 'android' ? 0 : 10,
+  },
   topSafeArea: {
     flex: 0,
   },

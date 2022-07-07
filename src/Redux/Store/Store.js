@@ -16,12 +16,15 @@ import topTab from '../Features/TopTabSlice';
 import app from '../Features/AppSlice';
 import rfq from '../Features/RFQsSlice';
 import attributes from '../Features/AttributesSlice';
+import agents from '../Features/AgentsSlice';
+import enquiries from '../Features/EnquirySlice';
 import logger from 'redux-logger';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['application'],
+  whitelist: ['application', 'login'],
+  timeout: null,
 };
 
 const reducers = combineReducers({
@@ -31,9 +34,18 @@ const reducers = combineReducers({
   rfq,
   app,
   attributes,
+  agents,
+  enquiries,
 });
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+const rootReducer = (state, action) => {
+  if (action.type === 'login/logout') {
+    state = {application: state.application};
+  }
+  return reducers(state, action);
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
