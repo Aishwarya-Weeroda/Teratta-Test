@@ -23,21 +23,23 @@ import {addEnquiries} from '../../Redux/Features/EnquirySlice';
 export default function Messages({navigation}) {
   const {colors} = useTheme();
   const attributes = useSelector(state => state.attributes.attributes);
+  const agents = useSelector(state => state.agents.agents);
   const dispatch = useDispatch();
   const [enquires, setEnquires] = useState([attributes]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const [currentIdex, setCurrentindex] = useState();
   const [isRecording, setRecording] = useState(false);
-  const [agentDatas, setAgentDatas] = useState(
-    useSelector(state => state.agents.agents),
-  );
+  const [agentDatas, setAgentDatas] = useState(agents);
   useEffect(() => {
     dispatch(getAgents());
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
+  useEffect(() => {
+    setAgentDatas(agents);
+  }, [agents]);
 
   const onRecordStart = () => {
     setRecording(!isRecording);
