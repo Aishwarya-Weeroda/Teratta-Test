@@ -16,6 +16,7 @@ import {store} from './src/Redux/Store/Store';
 import StackNavigation from './src/Navigation/StackNavigation';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
+import {CustomeToast} from './src/Screens/Toast';
 
 let persistor = persistStore(store);
 
@@ -35,6 +36,7 @@ const App = () => {
           </NavigationContainer>
         </NativeBaseProvider>
       </PersistGate>
+      <CustomeToast />
     </Provider>
   );
 };

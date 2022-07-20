@@ -1,21 +1,13 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  LogBox,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import {View, TouchableOpacity, LogBox, Dimensions} from 'react-native';
 const {width} = Dimensions.get('screen');
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useTheme, BaseColor} from '../config';
+import {useTheme} from '../config';
 import styles from './Style';
-import {useSelector} from 'react-redux';
-import TextInput from '../component/TextInput';
 import Text from '../component/Text';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -26,7 +18,6 @@ import Buyer from '../components/Buyer/Buyer';
 import Home from '../Screens/Home/Home';
 import Profile from '../Screens/Profile/Profile';
 import Settings from '../Screens/Settings/Settings';
-import Messages from '../Screens/Messages/Messages';
 import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
 import SelectDarkOption from '../Screens/SelectDarkOption';
 import Enquiry from '../Screens/Enquiry';
@@ -37,13 +28,13 @@ import RFQDetails from '../Screens/RFQDetails';
 import AddEnquiry from '../Screens/AddEnquiry';
 import Header from '../component/Header/Header';
 import Search from '../component/Search';
-import EnquiryList from '../Screens/EnquiryList';
 import Filter from '../Screens/Filter';
 import SupplierHome from '../Screens/SupplierHome';
 import Agents from '../Screens/Agents';
 import Suppliers from '../Screens/Suppliers';
 import Buyers from '../Screens/Buyers';
 import UserDetails from '../Screens/UserDetails';
+import Comments from '../Screens/Comments';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -59,7 +50,6 @@ const HomeStack = createNativeStackNavigator();
 const AgentStack = createNativeStackNavigator();
 const SupplierStack = createNativeStackNavigator();
 
-const TopTab = createMaterialTopTabNavigator();
 const AgentTopTab = createMaterialTopTabNavigator();
 
 function canTabBarVisibile(route) {
@@ -73,92 +63,6 @@ function canTabBarVisibile(route) {
       return 'flex';
   }
 }
-const TopTabBarContainer = ({navigation}) => {
-  const {colors} = useTheme();
-  return (
-    <>
-      <View style={{flex: 1, backgroundColor: colors.background}}>
-        <Header
-          title="Enquiry Details"
-          style={{borderColor: colors.border}}
-          renderLeft={() => {
-            return (
-              <Icon
-                name="chevron-back"
-                size={25}
-                color={colors.primary}
-                enableRTL={true}
-              />
-            );
-          }}
-          onPressLeft={() => {
-            navigation.goBack();
-          }}
-        />
-        <View style={{flex: 2}}>
-          <ScrollView scrollEventThrottle={8}>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Count & Blend
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                42s HTR 45% Bamboo 55% Cotton Compact
-              </Text>
-            </View>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Color
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                BC22GR511908
-              </Text>
-            </View>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Shade
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                Cerulean Melange
-              </Text>
-            </View>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Quantity
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                45 Kgs
-              </Text>
-            </View>
-          </ScrollView>
-        </View>
-        <View style={{flex: 8}}>
-          <TopTabBar />
-        </View>
-        <View style={{flex: 1, marginBottom: 10}}>
-          <View style={styles.inputContent}>
-            <View style={{flex: 1}}>
-              <TextInput
-                // onChangeText={text => setInput(text)}
-                // onSubmitEditing={() => sendMessage()}
-                placeholder="Type Message ..."
-                // value={input}
-              />
-            </View>
-            <TouchableOpacity
-              style={[styles.sendIcon, {backgroundColor: colors.primary}]}>
-              <Icon
-                name="paper-plane"
-                size={20}
-                color="white"
-                enableRTL={true}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </>
-  );
-};
 
 const AgentTopTabBarContainer = ({navigation}) => {
   const {colors} = useTheme();
@@ -181,34 +85,6 @@ const AgentTopTabBarContainer = ({navigation}) => {
     </>
   );
 };
-
-const TopTabBar = () => {
-  const {colors} = useTheme();
-  const tabs = useSelector(state => state.topTab.tabs);
-  const activeTab = useSelector(state => state.topTab.activeTab);
-  return (
-    <TopTab.Navigator
-      initialRouteName={activeTab}
-      screenOptions={{
-        tabBarStyle: {
-          borderWidth: 0.7,
-          borderColor: colors.border,
-          ...styles.topTabBarStyle,
-          // ...styles.shdow,
-          // backgroundColor: colors.background,
-        },
-        tabBarScrollEnabled: true,
-        tabBarIndicatorStyle: {
-          backgroundColor: colors.primary,
-        },
-      }}>
-      {tabs?.map(t => (
-        <TopTab.Screen key={t} name={t} component={Messages} />
-      ))}
-    </TopTab.Navigator>
-  );
-};
-
 const AgentTopTabBar = () => {
   const {colors} = useTheme();
   return (
@@ -254,7 +130,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator
       initialRouteName={'HomeStack'}
       screenOptions={{headerShown: false}}>
-      <HomeStack.Screen name="Modal" component={TopTabBarContainer} />
+      <HomeStack.Screen name="Modal" component={Comments} />
       <HomeStack.Screen name="HomeStack" component={Home} />
       <HomeStack.Screen name="Enquiry" component={Enquiry} />
       <HomeStack.Screen name="Filter" component={Filter} />
@@ -314,7 +190,7 @@ function AgentStackScreen() {
     <AgentStack.Navigator
       initialRouteName={'AgentHome'}
       screenOptions={{headerShown: false}}>
-      <HomeStack.Screen name="Modal" component={TopTabBarContainer} />
+      <HomeStack.Screen name="Modal" component={Comments} />
       <AgentStack.Screen name="CreateRFQ" component={CreateRFQ} />
       <AgentStack.Screen name="Filter" component={Filter} />
       <AgentStack.Screen name="AgentHome" component={AgentTopTabBarContainer} />

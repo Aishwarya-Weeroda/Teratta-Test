@@ -14,7 +14,10 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const {colors} = useTheme();
 
-  const [user, setUser] = useState({userName: 'bvk-hr', password: 'pass1234'});
+  const [user, setUser] = useState({
+    userName: 'bvk-hr',
+    password: 'pass1234',
+  });
 
   const onChange = payload => {
     setUser(user => ({

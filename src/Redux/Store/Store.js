@@ -18,6 +18,7 @@ import rfq from '../Features/RFQsSlice';
 import attributes from '../Features/AttributesSlice';
 import agents from '../Features/AgentsSlice';
 import enquiries from '../Features/EnquirySlice';
+import comments from '../Features/CommentSlice';
 import logger from 'redux-logger';
 
 const persistConfig = {
@@ -36,6 +37,7 @@ const reducers = combineReducers({
   attributes,
   agents,
   enquiries,
+  comments,
 });
 
 const rootReducer = (state, action) => {

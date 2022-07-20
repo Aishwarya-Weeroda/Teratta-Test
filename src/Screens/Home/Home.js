@@ -5,6 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from '../../component/Accordion/Accordion';
@@ -15,6 +16,7 @@ import {updateTab} from '../../Redux/Features/TopTabSlice';
 import Search from '../../component/Search';
 import {getAttributes} from '../../Redux/Features/AttributesSlice';
 import {getEnquiries} from '../../Redux/Features/EnquirySlice';
+import {getComments} from '../../Redux/Features/CommentSlice';
 
 const styles = StyleSheet.create({
   menuIcon: {
@@ -38,23 +40,36 @@ const styles = StyleSheet.create({
 });
 export default function Home({navigation}) {
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(getEnquiries());
-    dispatch(getAttributes());
+    loadData();
   }, []);
-
   const {colors} = useTheme();
+  const [refreshing, setRefreshing] = React.useState(false);
   const enquiryDetails = useSelector(state => state.rfq.enquiryDetails);
   const onBtnPress = (agents, currentAgent) => {
     dispatch(
+      getComments({enqDetailId: '92adf645-cace-4ca8-bf02-e59c5a2e6d82'}),
+    );
+    dispatch(
       updateTab({
-        tabs: agents.map(agent => agent.name),
+        orgs: agents.map(agent => ({
+          name: agent.name,
+          id: '92adf645-cace-4ca8-bf02-e59c5a2e6d82',
+        })),
         activeTab: currentAgent,
       }),
     );
     navigation.navigate('Modal');
   };
+  const loadData = () => {
+    dispatch(getEnquiries());
+    dispatch(getAttributes());
+  };
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    loadData();
+    setRefreshing(false);
+  }, []);
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header
@@ -65,7 +80,10 @@ export default function Home({navigation}) {
         onPressRight={() => navigation.navigate('Filter')}
       />
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <Search />
           {enquiryDetails.map((enquiryDetail, index) => (
             <Accordion

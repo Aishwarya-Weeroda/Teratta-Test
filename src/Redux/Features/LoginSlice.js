@@ -11,6 +11,7 @@ const initialState = {
   email: '',
   role: '',
   type: '',
+  userId: '',
 };
 
 export const authenticate = createAsyncThunk(
@@ -44,6 +45,7 @@ export const loginSlice = createSlice({
       state.name = `${decoded.firstName} ${decoded.firstName}`;
       state.type = decoded?.type?.toLowerCase();
       state.isLoggedIn = true;
+      state.userId = decoded.userId;
     },
   },
 });

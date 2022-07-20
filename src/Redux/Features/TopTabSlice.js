@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  tabs: ['test1', 'test2', 'tes34', 'test4'],
+  orgs: ['test1', 'test2', 'tes34', 'test4'],
   activeTab: 'test1',
 };
 
