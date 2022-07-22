@@ -28,7 +28,7 @@ const Comments = ({navigation}) => {
             getComments({enqDetailId: '92adf645-cace-4ca8-bf02-e59c5a2e6d82'}),
           );
         });
-      setComment('');   
+      setComment('');
     }
   };
   const callback = payload => {

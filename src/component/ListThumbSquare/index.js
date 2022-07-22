@@ -55,7 +55,6 @@ ListThumbSquare.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   loading: PropTypes.bool,
   imageStyle: PropTypes.object,
-  image: PropTypes.object.isRequired,
   txtLeftTitle: PropTypes.string,
   txtContent: PropTypes.string,
   txtRight: PropTypes.string,

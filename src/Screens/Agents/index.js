@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {BaseStyle, useTheme} from '../../config';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../component/Header/Header';
-import {AgentsData} from '../../data/Users';
 import UserList from '../UserList';
+import {useSelector, useDispatch} from 'react-redux';
+import {getAgents} from '../../Redux/Features/AgentsSlice';
 
-export default function Messenger({navigation}) {
+export default function Agents({navigation}) {
   const {colors} = useTheme();
+  const dispatch = useDispatch();
+  const data = useSelector(state => state.agents.agentsData);
+  useEffect(() => {
+    console.log('data', data);
+    dispatch(getAgents());
+  }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
@@ -15,7 +22,7 @@ export default function Messenger({navigation}) {
       <SafeAreaView
         style={BaseStyle.safeAreaView}
         edges={['right', 'left', 'bottom']}>
-        <UserList navigation={navigation} data={AgentsData} />
+        <UserList navigation={navigation} data={data} />
       </SafeAreaView>
     </View>
   );

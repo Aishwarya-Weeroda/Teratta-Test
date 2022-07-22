@@ -6,9 +6,9 @@ import Header from '../../component/Header/Header';
 import ProfileDetail from '../Profile/Details/Details';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function UserDetails({navigation}) {
+export default function UserDetails({navigation, route}) {
   const {colors} = useTheme();
-
+  const user = route.params.user;
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <Header
@@ -30,7 +30,11 @@ export default function UserDetails({navigation}) {
         style={BaseStyle.safeAreaView}
         edges={['right', 'left', 'bottom']}>
         <View style={{padding: 20}}>
-          <ProfileDetail />
+          <ProfileDetail
+            textFirst={`${user.firstName} ${user.lastName}`}
+            textSecond={user.orgName}
+            textThird={user.email}
+          />
         </View>
       </SafeAreaView>
     </View>

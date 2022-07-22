@@ -4,6 +4,7 @@ import {groupAgents} from '../../utils/';
 
 const initialState = {
   agents: [],
+  agentsData: [],
 };
 const defaultParams = {
   page: 1,
@@ -24,6 +25,7 @@ export const agentsSlice = createSlice({
   extraReducers: {
     [getAgents.fulfilled]: (state, {payload}) => {
       state.loading = false;
+      state.agentsData = payload;
       state.agents = groupAgents(payload, 'orgName');
     },
   },

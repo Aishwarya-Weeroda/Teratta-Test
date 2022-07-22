@@ -21,12 +21,11 @@ export default function UserList({navigation, data}) {
           renderItem={({item, index}) => (
             <ListThumbSquare
               onPress={() => {
-                navigation.navigate('UserDetails');
+                navigation.navigate('UserDetails', {user: item});
               }}
-              image={item.image}
-              txtLeftTitle={item.name}
-              txtContent={item.message}
-              txtRight={item.time}
+              image={require('../../images/avatar1.png')}
+              txtLeftTitle={`${item.firstName} ${item.lastName}`}
+              txtContent={item.email}
             />
           )}
         />
