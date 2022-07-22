@@ -6,7 +6,7 @@ function select(state) {
 }
 
 export const http = axios.create({
-  baseURL: 'http://172.20.10.7:3001/api/v1',
+  baseURL: 'http://192.168.1.101:3001/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,11 +34,9 @@ http.interceptors.request.use(
   },
 );
 
-export const thunkHandler = async (asyncFn, thunkAPI, otherAction) => {
+export const thunkHandler = async (asyncFn, thunkAPI) => {
   try {
     const response = await asyncFn;
-    if (otherAction !== undefined) {
-    }
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);
