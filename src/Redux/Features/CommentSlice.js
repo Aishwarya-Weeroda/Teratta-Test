@@ -5,15 +5,9 @@ const initialState = {
   comments: {},
 };
 
-const defaultParams = {
-  page: 1,
-  limit: 100,
-  type: 'AGENT',
-};
-
 export const getComments = createAsyncThunk(
   'comments/get',
-  (params = defaultParams, thunkAPI) => {
+  (params, thunkAPI) => {
     return thunkHandler(
       http.get('/enquiries/details/comments', {params}),
       thunkAPI,

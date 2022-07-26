@@ -16,7 +16,6 @@ import {updateTab} from '../../Redux/Features/TopTabSlice';
 import Search from '../../component/Search';
 import {getAttributes} from '../../Redux/Features/AttributesSlice';
 import {getEnquiries} from '../../Redux/Features/EnquirySlice';
-import {getComments} from '../../Redux/Features/CommentSlice';
 
 const styles = StyleSheet.create({
   menuIcon: {
@@ -40,23 +39,23 @@ const styles = StyleSheet.create({
 });
 export default function Home({navigation}) {
   const dispatch = useDispatch();
+  const enquiries = useSelector(state => state.enquiries.enquiryList);
   useEffect(() => {
     loadData();
   }, []);
   const {colors} = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
-  const enquiryDetails = useSelector(state => state.rfq.enquiryDetails);
-  const onBtnPress = (agents, currentAgent) => {
-    dispatch(
-      getComments({enqDetailId: '92adf645-cace-4ca8-bf02-e59c5a2e6d82'}),
-    );
+
+  const onBtnPress = (data, currentItem) => {
     dispatch(
       updateTab({
-        orgs: agents.map(agent => ({
-          name: agent.name,
-          id: '92adf645-cace-4ca8-bf02-e59c5a2e6d82',
+        orgs: data.map(org => ({
+          name: org.orgName,
+          id: org.enqDetailId,
+          enquiryId: org.enquiryId,
         })),
-        activeTab: currentAgent,
+        activeTab: currentItem.orgName,
+        enquiryId: currentItem.enquiryId,
       }),
     );
     navigation.navigate('Modal');
@@ -85,12 +84,12 @@ export default function Home({navigation}) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <Search />
-          {enquiryDetails.map((enquiryDetail, index) => (
+          {enquiries.map((enquiry, index) => (
             <Accordion
-              key={enquiryDetail.name + index}
+              key={enquiry.name + index}
               onBtnPress={onBtnPress}
-              data={enquiryDetail.agents}
-              name={enquiryDetail.name}
+              data={enquiry.enq_details}
+              name={enquiry.name}
             />
           ))}
         </ScrollView>

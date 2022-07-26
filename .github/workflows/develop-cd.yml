@@ -6,8 +6,6 @@ on:
       - master
       - develop
       - new-user-flow
-      - api-impl
-
 jobs:
   dev-distribution:
     runs-on: ubuntu-latest

@@ -14,19 +14,19 @@ import {postComments, getComments} from '../../Redux/Features/CommentSlice';
 const Comments = ({navigation}) => {
   const tabs = useSelector(state => state.topTab.orgs);
   const activeTab = useSelector(state => state.topTab.activeTab);
+  const enquiryId = useSelector(state => state.topTab.enquiryId);
+  const enquiryList = useSelector(state => state.enquiries.enquiryList);
+  const enquiry = enquiryList.find(enq => enq.enquiryId === enquiryId);
   const {colors} = useTheme();
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [id, setId] = useState('');
-  const refFlatList = useRef(null);
   const sendMessage = () => {
     if (comment !== '') {
       dispatch(postComments({enqDetailId: id, comment}))
         .unwrap()
         .then(() => {
-          dispatch(
-            getComments({enqDetailId: '92adf645-cace-4ca8-bf02-e59c5a2e6d82'}),
-          );
+          dispatch(getComments({page: 1, limit: 10, enqDetailId: id}));
         });
       setComment('');
     }
@@ -34,6 +34,18 @@ const Comments = ({navigation}) => {
   const callback = payload => {
     setId(payload);
   };
+  const renderAttribute = (attribute, index) => (
+    <View
+      key={attribute.attributeId + index}
+      style={{marginLeft: 10, marginBottom: 10}}>
+      <Text caption1 grayColor>
+        {attribute.name}
+      </Text>
+      <Text footnote semibold style={{marginTop: 5}}>
+        {attribute.value}
+      </Text>
+    </View>
+  );
   return (
     <>
       <View style={{flex: 1, backgroundColor: colors.background}}>
@@ -56,38 +68,9 @@ const Comments = ({navigation}) => {
         />
         <View style={{flex: 2}}>
           <ScrollView scrollEventThrottle={8}>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Count & Blend
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                42s HTR 45% Bamboo 55% Cotton Compact
-              </Text>
-            </View>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Color
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                BC22GR511908
-              </Text>
-            </View>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Shade
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                Cerulean Melange
-              </Text>
-            </View>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text caption1 grayColor>
-                Quantity
-              </Text>
-              <Text footnote semibold style={{marginTop: 5}}>
-                45 Kgs
-              </Text>
-            </View>
+            {enquiry?.attributes?.map((attribute, index) =>
+              renderAttribute(attribute, index),
+            )}
           </ScrollView>
         </View>
         <View style={{flex: 8}}>

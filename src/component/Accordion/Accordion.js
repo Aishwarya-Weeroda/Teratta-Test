@@ -25,11 +25,13 @@ export default function Accordion({name, onBtnPress, data}) {
 
   const getStatusColor = status => {
     switch (status) {
-      case 'Completed':
+      case 'COMPLETED':
         return '#16a34a';
-      case 'In Progress':
+      case 'INITIATED':
         return '#ea580c';
       case 'Declined':
+        return '#b91c1c';
+      case 'IN_PROGRESS':
         return '#b91c1c';
       default:
         return '#22c55e';
@@ -90,10 +92,10 @@ export default function Accordion({name, onBtnPress, data}) {
           return (
             <View
               style={[styles.lineWorkHours, {borderColor: colors.border}]}
-              key={item.name + index}>
+              key={item.orgId + index}>
               <View style={styles.textStyle}>
                 <Text style={{color: colors.text}} numberOfLines={1}>
-                  {item.name}
+                  {item.orgName}
                 </Text>
                 <Icon
                   name={
@@ -107,7 +109,7 @@ export default function Accordion({name, onBtnPress, data}) {
               </View>
 
               {!collapseHour && (
-                <Tag onPress={() => onBtnPress(data, item.name)} status>
+                <Tag onPress={() => onBtnPress(data, item)} status>
                   view
                 </Tag>
               )}

@@ -1,10 +1,11 @@
 import React from 'react';
+import {Dimensions} from 'react-native';
 import {useTheme} from '../../config';
 import styles from './styles';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Messages from '../Messages/Messages';
 
-const Tabs = ({tabs, activeTab, callback}) => {
+const Tabs = ({tabs = [], activeTab, callback}) => {
   const TopTab = createMaterialTopTabNavigator();
   const {colors} = useTheme();
   return (
@@ -23,12 +24,13 @@ const Tabs = ({tabs, activeTab, callback}) => {
         },
       }}>
       {tabs?.map(t => (
-        <TopTab.Screen key={t.name} name={t.name}>
+        <TopTab.Screen key={t.name} name={t.name} initialParams={t}>
           {props => (
             <Messages
               {...props}
               messages={t.messages}
               id={t.id}
+              enquiryId={t.enquiryId}
               callback={callback}
             />
           )}
