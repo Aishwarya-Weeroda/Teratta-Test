@@ -17,8 +17,8 @@ import Voice from '@react-native-community/voice';
 import styles from './style';
 import EnquiryForm from '../EnquiryForm';
 import AgentSelect from '../Receipient';
-import {getAgents} from '../../Redux/Features/AgentsSlice';
-import {addEnquiries} from '../../Redux/Features/EnquirySlice';
+import {getAgentsByOrg} from '../../Redux/Features/AgentsSlice';
+import {addEnquiries, getEnquiries} from '../../Redux/Features/EnquirySlice';
 
 export default function Messages({navigation}) {
   const {colors} = useTheme();
@@ -32,7 +32,7 @@ export default function Messages({navigation}) {
   const [isRecording, setRecording] = useState(false);
   const [agentDatas, setAgentDatas] = useState(agents);
   useEffect(() => {
-    dispatch(getAgents());
+    dispatch(getAgentsByOrg());
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
@@ -59,7 +59,7 @@ export default function Messages({navigation}) {
   const onChildPress = (item, parentId) => {
     const newAgentDatas = JSON.parse(JSON.stringify(agentDatas));
     newAgentDatas
-      .filter(agent => agent.id === parentId)
+      .filter(agent => agent.orgId === parentId)
       .map(agent => {
         agent.agents
           .filter(user => user._id === item._id)
@@ -84,10 +84,11 @@ export default function Messages({navigation}) {
   const onAccPress = item => {
     const newAgentDatas = JSON.parse(JSON.stringify(agentDatas));
     newAgentDatas
-      .filter(agent => agent.id === item.id)
+      .filter(agent => agent.orgId === item.orgId)
       .map(agent => {
         if (item.selected) {
           agent.selected = false;
+          agent.partialSeclection = false;
           return agent.agents.map(user => (user.selected = false));
         } else if (!item.selected || item.partialSeclection) {
           agent.selected = true;
@@ -113,25 +114,28 @@ export default function Messages({navigation}) {
             userId: agent.userId,
             email: agent.email,
             userName: agent.userName,
+            orgId: data.orgId,
           })),
-      );
+      )
+      .map(obj => ({[obj[0].orgId]: obj}));
 
   const onSubmit = () => {
     const recepients = getRecepients();
+    console.log('recepients', recepients);
     const data = {
-      name: 'My First API Enquiry Initiated',
+      name: Date(),
       description: 'Enquiry description',
       attributes: enquires,
-      agents: [
-        {
-          '6b1d6e0d-4b63-4daf-a441-d5d97cb981c8': recepients,
-        },
-      ],
+      agents: recepients,
     };
     if (recepients.length > 0) {
-      dispatch(addEnquiries(data));
+      dispatch(addEnquiries(data))
+        .unwrap()
+        .then(() => {
+          dispatch(getEnquiries());
+          navigation.navigate('HomeStack');
+        });
     }
-    setModalVisible(false);
   };
 
   return (

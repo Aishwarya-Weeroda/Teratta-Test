@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, TouchableOpacity, LogBox, Dimensions} from 'react-native';
-const {width} = Dimensions.get('screen');
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,7 +9,6 @@ import {useTheme} from '../config';
 import styles from './Style';
 import Text from '../component/Text';
 
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import Agent from '../components/Agent/Agent';
@@ -21,13 +19,9 @@ import Settings from '../Screens/Settings/Settings';
 import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
 import SelectDarkOption from '../Screens/SelectDarkOption';
 import Enquiry from '../Screens/Enquiry';
-import SentRFQ from '../Screens/SentRFQ';
-import RFQs from '../Screens/RFQs';
 import CreateRFQ from '../Screens/CreateRFQs';
 import RFQDetails from '../Screens/RFQDetails';
 import AddEnquiry from '../Screens/AddEnquiry';
-import Header from '../component/Header/Header';
-import Search from '../component/Search';
 import Filter from '../Screens/Filter';
 import SupplierHome from '../Screens/SupplierHome';
 import Agents from '../Screens/Agents';
@@ -35,6 +29,7 @@ import Suppliers from '../Screens/Suppliers';
 import Buyers from '../Screens/Buyers';
 import UserDetails from '../Screens/UserDetails';
 import Comments from '../Screens/Comments';
+import AgentHome from '../Screens/AgentHome';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -50,8 +45,6 @@ const HomeStack = createNativeStackNavigator();
 const AgentStack = createNativeStackNavigator();
 const SupplierStack = createNativeStackNavigator();
 
-const AgentTopTab = createMaterialTopTabNavigator();
-
 function canTabBarVisibile(route) {
   // If the focused route is not found, we
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
@@ -63,51 +56,6 @@ function canTabBarVisibile(route) {
       return 'flex';
   }
 }
-
-const AgentTopTabBarContainer = ({navigation}) => {
-  const {colors} = useTheme();
-  return (
-    <>
-      <View style={{flex: 1, backgroundColor: colors.background}}>
-        <Header
-          title="Enquiry & RFQ"
-          style={{borderColor: colors.border}}
-          renderRight={() => (
-            <Icon name="funnel-outline" color={colors.primary} size={20} />
-          )}
-          onPressRight={() => navigation.navigate('Filter')}
-        />
-        <Search />
-        <View style={{flex: 8}}>
-          <AgentTopTabBar />
-        </View>
-      </View>
-    </>
-  );
-};
-const AgentTopTabBar = () => {
-  const {colors} = useTheme();
-  return (
-    <AgentTopTab.Navigator
-      initialRouteName="EnquiryList"
-      style={{borderColor: 'red'}}
-      screenOptions={{
-        tabBarStyle: {
-          borderBottomWidth: 0.7,
-          borderColor: colors.border,
-          ...styles.topTabBarStyle,
-        },
-        tabBarItemStyle: {width: width / 2},
-        tabBarScrollEnabled: true,
-        tabBarIndicatorStyle: {
-          backgroundColor: colors.primary,
-        },
-      }}>
-      <AgentTopTab.Screen name="Enquiry" component={RFQs} />
-      <AgentTopTab.Screen name="RFQ" component={SentRFQ} />
-    </AgentTopTab.Navigator>
-  );
-};
 
 function ProfileStackScreen() {
   return (
@@ -193,7 +141,7 @@ function AgentStackScreen() {
       <HomeStack.Screen name="Modal" component={Comments} />
       <AgentStack.Screen name="CreateRFQ" component={CreateRFQ} />
       <AgentStack.Screen name="Filter" component={Filter} />
-      <AgentStack.Screen name="AgentHome" component={AgentTopTabBarContainer} />
+      <AgentStack.Screen name="AgentHome" component={AgentHome} />
       <AgentStack.Screen name="RFQDetails" component={RFQDetails} />
     </AgentStack.Navigator>
   );
