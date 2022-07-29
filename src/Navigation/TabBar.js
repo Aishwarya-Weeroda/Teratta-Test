@@ -1,9 +1,8 @@
 import React from 'react';
-import {View, TouchableOpacity, LogBox, Dimensions} from 'react-native';
+import {View, LogBox} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from '../config';
 import styles from './Style';
@@ -19,7 +18,6 @@ import Settings from '../Screens/Settings/Settings';
 import ThemeSetting from '../Screens/ThemeSettings/ThemeSettings';
 import SelectDarkOption from '../Screens/SelectDarkOption';
 import Enquiry from '../Screens/Enquiry';
-import CreateRFQ from '../Screens/CreateRFQs';
 import RFQDetails from '../Screens/RFQDetails';
 import AddEnquiry from '../Screens/AddEnquiry';
 import Filter from '../Screens/Filter';
@@ -30,6 +28,7 @@ import Buyers from '../Screens/Buyers';
 import UserDetails from '../Screens/UserDetails';
 import Comments from '../Screens/Comments';
 import AgentHome from '../Screens/AgentHome';
+import EnquiryDetails from '../Screens/EnquiryDetails';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -139,7 +138,7 @@ function AgentStackScreen() {
       initialRouteName={'AgentHome'}
       screenOptions={{headerShown: false}}>
       <HomeStack.Screen name="Modal" component={Comments} />
-      <AgentStack.Screen name="CreateRFQ" component={CreateRFQ} />
+      <AgentStack.Screen name="enquiryDetails" component={EnquiryDetails} />
       <AgentStack.Screen name="Filter" component={Filter} />
       <AgentStack.Screen name="AgentHome" component={AgentHome} />
       <AgentStack.Screen name="RFQDetails" component={RFQDetails} />
@@ -158,21 +157,6 @@ function SupplierStackScreen() {
     </SupplierStack.Navigator>
   );
 }
-
-const CustomTabBar = ({children, onPress}) => {
-  const {colors} = useTheme();
-  return (
-    <TouchableOpacity
-      style={[styles.shdow, styles.customBtn]}
-      onPress={onPress}>
-      <LinearGradient
-        style={styles.gradientStyle}
-        colors={[colors.primary, colors.secondary]}>
-        {children}
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-};
 
 const getColors = (isFocused, colors) =>
   isFocused ? colors.primary : '#748c94';
