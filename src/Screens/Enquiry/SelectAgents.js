@@ -89,7 +89,7 @@ export default function SelectAgents({onAccPress, onChildPress, data}) {
           return (
             <View
               style={[styles.lineWorkHours, {borderColor: colors.border}]}
-              key={item.orgName + index}>
+              key={item.userId + index}>
               <View style={styles.textStyle}>
                 <Text style={{color: colors.text}} numberOfLines={1}>
                   {item.email}

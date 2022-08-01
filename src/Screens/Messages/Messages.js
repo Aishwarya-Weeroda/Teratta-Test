@@ -1,25 +1,26 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {
-  View,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-} from 'react-native';
-import {BaseStyle, useTheme} from '../../config';
+import React, {useRef, useEffect} from 'react';
+import {View, FlatList, Platform, Image} from 'react-native';
+import {useTheme} from '../../config';
 import Text from '../../component/Text';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useDispatch, useSelector} from 'react-redux';
-
+import {useSelector, useDispatch} from 'react-redux';
+import {useNavigationState} from '@react-navigation/native';
 import styles from './Style';
+import {getComments} from '../../Redux/Features/CommentSlice';
 
 export default function Messages({id, callback}) {
-  const messages = useSelector(state => state.comments.comments[id]);
+  const messages = useSelector(state => state.comments.comments[id] || []);
   const userId = useSelector(state => state.login.userId);
+  const navState = useNavigationState(state => state);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    callback(id);
+    dispatch(getComments({page: 1, limit: 10, enqDetailId: id}));
     scrollToEnd(false);
   }, []);
+
+  useEffect(() => {
+    callback(navState.routes[navState.index].params.id);
+  }, [navState.index]);
 
   const scrollToEnd = animated => {
     if (refFlatList.current) {
@@ -46,7 +47,7 @@ export default function Messages({id, callback}) {
             style={[styles.avatar, {borderColor: colors.border}]}
           />
           <View style={{paddingHorizontal: 8, flex: 7}}>
-            <Text caption1>{item.userId}</Text>
+            <Text caption1>{item.userName}</Text>
             <View
               style={[
                 styles.userContentMessage,
@@ -59,7 +60,7 @@ export default function Messages({id, callback}) {
           </View>
           <View style={styles.userContentDate}>
             <Text footnote numberOfLines={1}>
-              {item.commentDate}
+              {item.commentTime}
             </Text>
           </View>
         </View>
@@ -70,7 +71,7 @@ export default function Messages({id, callback}) {
       <View style={styles.meContent}>
         <View style={styles.meContentDate}>
           <Text footnote numberOfLines={1}>
-            {item.commentDate}
+            {item.commentTime}
           </Text>
         </View>
         <View style={{paddingLeft: 8, flex: 7}}>

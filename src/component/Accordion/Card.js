@@ -5,10 +5,9 @@ import {useTheme} from '../../config';
 import styles from './Style';
 import Text from '../../component/Text';
 
-export default function Card({name, onBtnPress, data}) {
+export default function Card({status, onBtnPress, data}) {
   const {colors} = useTheme();
-
-  const getStatusColor = status => {
+  const getStatusColor = () => {
     switch (status) {
       case 'Completed':
         return '#16a34a';
@@ -37,7 +36,7 @@ export default function Card({name, onBtnPress, data}) {
             borderRadius: 5,
             height: 45,
             borderColor: colors.border,
-            borderLeftColor: getStatusColor(data.status),
+            borderLeftColor: getStatusColor(),
             borderLeftWidth: 4,
           },
         ]}

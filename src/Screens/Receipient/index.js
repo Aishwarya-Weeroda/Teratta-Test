@@ -42,10 +42,10 @@ export default function AgentSelect(props) {
               <SelectAgents
                 onAccPress={onAccPress}
                 onChildPress={childItem =>
-                  onChildPress(childItem, agentData.id)
+                  onChildPress(childItem, agentData.orgId)
                 }
                 data={agentData}
-                key={agentData.id + index}
+                key={agentData._id + index}
               />
             ))}
           </ScrollView>

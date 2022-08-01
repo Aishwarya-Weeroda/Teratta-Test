@@ -3,7 +3,7 @@ import {View, FlatList} from 'react-native';
 import {useTheme} from '../../config';
 import styles from './style';
 import Text from '../../component/Text';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import ListThumbSquare from '../../component/ListThumbSquare';
 
 export default function UserList({navigation, data}) {
