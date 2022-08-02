@@ -1,15 +1,17 @@
 import axios from 'axios';
 import {store} from '../Store/Store';
+import {logout} from '../Features/LoginSlice';
 
 function select(state) {
   return state.login.token;
 }
 
 export const http = axios.create({
-  baseURL: 'http://103.86.177.164/api/v1',
+  baseURL: 'http://192.168.1.101:3001/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 1000 * 10,
 });
 
 http.interceptors.request.use(
@@ -39,6 +41,20 @@ export const thunkHandler = async (asyncFn, thunkAPI) => {
     const response = await asyncFn;
     return response.data;
   } catch (error) {
+    if (error.response) {
+      if (error.response.status === 401) {
+        store.dispatch(logout());
+      }
+      return thunkAPI.rejectWithValue(error.response.data);
+    } else if (error.request) {
+      if (error.code === 'ECONNABORTED') {
+        return thunkAPI.rejectWithValue({
+          statusCode: '500',
+          statusTitle: 'Timeout',
+          statusDesc: error.message,
+        });
+      }
+    }
     return thunkAPI.rejectWithValue(error.response.data);
   }
 };

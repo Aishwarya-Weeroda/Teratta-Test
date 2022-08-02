@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   activitystyle: {
-    marginTop: 35,
+    marginTop: 18,
   },
   text: {
     alignContent: 'center',
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 10,
     marginLeft: '2%',
-    width: '30%',
-    height: '15%',
+    width: '25%',
+    height: '10%',
     shadowColor: '#a8a29e',
     shadowOffset: {
       width: 1,

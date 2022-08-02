@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Text,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import styles from './Styles';
+import {useTheme} from '../../config';
 
 export default function AppLoading() {
+  const {colors} = useTheme();
   const appstatus = useSelector(state => state.app);
   return appstatus.loading ? (
     <View style={styles.container}>
@@ -18,7 +13,7 @@ export default function AppLoading() {
         <ActivityIndicator
           style={styles.activitystyle}
           size="large"
-          color="blue"
+          color={colors.primary}
         />
         <Text style={styles.text}>Loading...</Text>
       </TouchableOpacity>

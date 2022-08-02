@@ -1,17 +1,18 @@
 import React, {useEffect} from 'react';
 import Toast from 'react-native-toast-message';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateAppState} from '../../Redux/Features/AppSlice';
 
 export function CustomeToast(props) {
   const app = useSelector(state => state.app);
-  const showToast = useSelector(state => state.showToast);
-
+  const dispatch = useDispatch();
   const show = () => {
     Toast.show({
       type: app.type,
       text1: app.title,
       text2: app.message,
       position: 'bottom',
+      onHide: () => dispatch(updateAppState({showToast: false})),
     });
   };
 
@@ -19,7 +20,7 @@ export function CustomeToast(props) {
     if (app.showToast) {
       show();
     }
-  }, [showToast]);
+  }, [app]);
   return (
     <>
       <Toast />
