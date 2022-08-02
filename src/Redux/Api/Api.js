@@ -7,7 +7,7 @@ function select(state) {
 }
 
 export const http = axios.create({
-  baseURL: 'http://192.168.1.101:3001/api/v1',
+  baseURL: 'http://103.86.177.164/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
