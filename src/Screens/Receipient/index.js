@@ -17,6 +17,7 @@ export default function AgentSelect(props) {
     onChildPress,
     setModalVisible,
     onSubmit,
+    type,
   } = props;
   return (
     <View
@@ -44,8 +45,10 @@ export default function AgentSelect(props) {
                 onChildPress={childItem =>
                   onChildPress(childItem, agentData.orgId)
                 }
+                type={type}
                 data={agentData}
                 key={agentData._id + index}
+
               />
             ))}
           </ScrollView>

@@ -1,20 +1,11 @@
-import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React, {useEffect} from 'react';
+import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import Accordion from '../../component/Accordion/Accordion';
 import {useTheme} from '../../config';
-import Header from '../../component/Header/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateTab} from '../../Redux/Features/TopTabSlice';
 import {getComments} from '../../Redux/Features/CommentSlice';
-// import enquiryDetails from '../../data/EnquiryDetails';
+import {getRFQs} from '../../Redux/Features/RFQsSlice';
 
 const styles = StyleSheet.create({
   textInput: {
@@ -61,8 +52,12 @@ const styles = StyleSheet.create({
   },
 });
 export default function SentRFQ({navigation}) {
+  useEffect(() => {
+    dispatch(getRFQs({page: 1, limit: 10}));
+  }, []);
+
   const {colors} = useTheme();
-  const enquiryDetails = useSelector(state => state.rfq.sentRFQS);
+  const rfqs = useSelector(state => state.rfq.sentRFQS);
   const dispatch = useDispatch();
   const onBtnPress = (agents, currentAgent) => {
     dispatch(
@@ -83,12 +78,12 @@ export default function SentRFQ({navigation}) {
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <SafeAreaView style={{flex: 1}}>
         <ScrollView>
-          {enquiryDetails.map((enquiryDetail, index) => (
+          {rfqs?.map((rfq, index) => (
             <Accordion
-              key={enquiryDetail.name + index}
+              key={rfq.name + index}
               onBtnPress={onBtnPress}
-              data={enquiryDetail.agents}
-              name={enquiryDetail.name}
+              data={rfq.rfq_details}
+              name={rfq.name}
             />
           ))}
         </ScrollView>

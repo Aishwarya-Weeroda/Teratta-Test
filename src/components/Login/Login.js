@@ -6,29 +6,36 @@ import {styles} from './LoginStyle';
 import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {useTheme} from '../../config';
-import {Users} from '../../data/Users';
 
-import {login, authenticate} from '../../Redux/Features/LoginSlice';
+import {authenticate} from '../../Redux/Features/LoginSlice';
 
-const Login = ({navigation}) => {
+const Login = () => {
   const dispatch = useDispatch();
   const {colors} = useTheme();
 
   const [user, setUser] = useState({
-    userName: 'bvk-hr',
+    userName: 'xyz-hr',
     password: 'pass1234',
+    usrError: false,
+    pwdError: false,
   });
 
   const onChange = payload => {
-    setUser(user => ({
-      ...user,
+    setUser(preState => ({
+      ...preState,
       ...payload,
     }));
   };
 
   const onPress = () => {
+    if (!user.userName) {
+      onChange({usrError: true});
+      return;
+    } else if (!user.password) {
+      onChange({pwdError: true});
+      return;
+    }
     dispatch(authenticate(user));
-    // dispatch(login(Users[0]));
   };
 
   return (
@@ -47,17 +54,27 @@ const Login = ({navigation}) => {
           <Text style={styles.signInTxt}>Sign In</Text>
           <View style={styles.inputView}>
             <TextInput
-              onChangeText={value => onChange({userName: value})}
+              onChangeText={value =>
+                onChange({userName: value, usrError: false})
+              }
               placeholder="UserName"
-              style={styles.input}
+              style={[styles.input, user.usrError && {marginVertical: 5}]}
               value={user.userName}
             />
+            {user.usrError && (
+              <Text style={styles.forgotPwdTxt}>Please Enter the UserName</Text>
+            )}
             <TextInput
               secureTextEntry={true}
               placeholder="Password"
-              style={styles.input}
-              onChangeText={value => onChange({password: value})}
+              style={[styles.input, user.pwdError && {marginVertical: 5}]}
+              onChangeText={value =>
+                onChange({password: value, pwdError: false})
+              }
             />
+            {user.pwdError && (
+              <Text style={styles.forgotPwdTxt}>Please Enter the Password</Text>
+            )}
           </View>
           <View style={styles.rowDir}>
             <View style={styles.checkBoxView}>

@@ -112,7 +112,7 @@ export default function NewMessages({id}) {
         behavior={Platform.OS === 'android' ? 'height' : 'padding'}
         keyboardVerticalOffset={offsetKeyboard}
         enabled>
-        <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
+        <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left', 'down']}>
           <FlatList
             ref={refFlatList}
             data={messages}

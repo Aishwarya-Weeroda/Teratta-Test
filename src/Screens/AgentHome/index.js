@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTheme} from '../../config';
 import Search from '../../component/Search';
 import Header from '../../component/Header/Header';
@@ -7,14 +7,14 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {View, Dimensions} from 'react-native';
 const {width} = Dimensions.get('screen');
 import SentRFQ from '../../Screens/SentRFQ';
-import RFQs from '../../Screens/RFQs';
+import AgentEnqs from '../AgentEnqs';
 
 const AgentTopTab = createMaterialTopTabNavigator();
-const AgentTopTabBar = () => {
+const AgentTopTabBar = ({initialRouteName}) => {
   const {colors} = useTheme();
   return (
     <AgentTopTab.Navigator
-      initialRouteName="EnquiryList"
+      initialRouteName={initialRouteName}
       style={{borderColor: 'red'}}
       screenOptions={{
         tabBarStyle: {
@@ -28,14 +28,20 @@ const AgentTopTabBar = () => {
           backgroundColor: colors.primary,
         },
       }}>
-      <AgentTopTab.Screen name="Enquiry" component={RFQs} />
+      <AgentTopTab.Screen name="Enquiry" component={AgentEnqs} />
       <AgentTopTab.Screen name="RFQ" component={SentRFQ} />
     </AgentTopTab.Navigator>
   );
 };
 
-const AgentHome = ({navigation}) => {
+const AgentHome = ({navigation, route}) => {
   const {colors} = useTheme();
+  const [activeTab, setActiveTab] = useState('Enquiry');
+  const initialRouteName = route.params?.tab;
+  useEffect(() => {
+    setActiveTab(initialRouteName);
+  }, [initialRouteName]);
+  console.log('initialRouteName', initialRouteName);
   return (
     <>
       <View style={{flex: 1, backgroundColor: colors.background}}>
@@ -49,7 +55,7 @@ const AgentHome = ({navigation}) => {
         />
         <Search />
         <View style={{flex: 8}}>
-          <AgentTopTabBar />
+          <AgentTopTabBar initialRouteName={activeTab} />
         </View>
       </View>
     </>

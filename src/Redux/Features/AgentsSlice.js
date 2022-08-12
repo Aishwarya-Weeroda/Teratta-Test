@@ -4,6 +4,7 @@ import {groupAgents} from '../../utils/';
 
 const initialState = {
   agents: [],
+  suppliers: [],
   agentsData: [],
 };
 const defaultParams = {
@@ -16,6 +17,17 @@ export const getAgents = createAsyncThunk(
   'agents/get',
   (params = defaultParams, thunkAPI) =>
     thunkHandler(http.get('/enquiries/users', {params}), thunkAPI),
+);
+
+export const getSuppliersByOrg = createAsyncThunk(
+  'supplier/get',
+  (params = defaultParams, thunkAPI) =>
+    thunkHandler(
+      http.get('/enquiries/users', {
+        params: {...params, type: 'SUPPLIER', groupBy: 'orgId'},
+      }),
+      thunkAPI,
+    ),
 );
 
 export const getAgentsByOrg = createAsyncThunk(
@@ -33,12 +45,13 @@ export const agentsSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getAgents.fulfilled]: (state, {payload}) => {
-      state.loading = false;
       state.agentsData = payload;
     },
     [getAgentsByOrg.fulfilled]: (state, {payload}) => {
-      state.loading = false;
       state.agents = payload;
+    },
+    [getSuppliersByOrg.fulfilled]: (state, {payload}) => {
+      state.suppliers = payload;
     },
   },
 });

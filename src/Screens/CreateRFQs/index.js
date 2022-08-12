@@ -2,239 +2,140 @@ import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
 import {BaseStyle, useTheme} from '../../config';
 import Text from '../../component/Text';
-import Tag from '../../component/Tag';
 import TextInput from '../../component/TextInput';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../component/Header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-// import Icon from 'react-native-vector-icons/Ionicons';
-import Voice from '@react-native-community/voice';
+import {useSelector, useDispatch} from 'react-redux';
+import filter from 'lodash/filter';
 import styles from './style';
+import AgentSelect from '../Receipient';
+import {createRFQs, getRFQs} from '../../Redux/Features/RFQsSlice';
+import {getSuppliersByOrg} from '../../Redux/Features/AgentsSlice';
 
-export default function CreateRFQ({navigation}) {
+export default function CreateRFQ({navigation, route}) {
   const {colors} = useTheme();
-
-  const datas = [
-    {
-      id: 1,
-      org: 'Royal Yarns',
-      emails: [
-        {
-          id: 1,
-          email: 'test1@royal.com',
-        },
-        {
-          id: 2,
-          email: 'test2@royal.com',
-        },
-        {
-          id: 3,
-          email: 'test3@royal.com',
-        },
-      ],
-    },
-    {
-      id: 2,
-      org: 'Shanmugam Yarns',
-      emails: [
-        {
-          id: 1,
-          email: 'test1@shanmugam.com',
-        },
-        {
-          id: 2,
-          email: 'test2@shanmugam.com',
-        },
-        {
-          id: 3,
-          email: 'test3@shanmugam.com',
-        },
-      ],
-    },
-  ];
-
-  const [data, setData] = useState(datas);
-
-  const getIcon = (field, method) => (
-    <TouchableOpacity onPress={() => method(field)}>
-      <Icon name="mic-sharp" size={20} color={colors.text} enableRTL={true} />
-    </TouchableOpacity>
-  );
-
-  const fontIcon = (
-    <TouchableOpacity onPress={() => stopRecording()}>
-      <Icon
-        name="stop-circle-outline"
-        size={20}
-        color={colors.primary}
-        enableRTL={true}
-      />
-    </TouchableOpacity>
-  );
-  const [countBlend, setCountBlend] = useState('');
-  const [color, setColor] = useState('');
-  const [shade, setShade] = useState('');
-  const [quantity, setQuantity] = useState('');
   const [rate, setRate] = useState('');
   const [amount, setAmount] = useState('');
-  const [currentField, setCurrentField] = useState();
+  const enquiry = route?.params?.enquiry;
+  const suppliers = useSelector(state => state.agents.suppliers);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [suppliersDatas, setSupplierDatas] = useState(suppliers);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
+    dispatch(getSuppliersByOrg());
   }, []);
 
-  const startRecordingBlend = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = blendHandler;
-    setCountBlend('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (e) {
-      console.log('error', e);
+  useEffect(() => {
+    setSupplierDatas(suppliers);
+  }, [suppliers]);
+
+  const onChildPress = (item, parentId) => {
+    const newSupplierDatas = JSON.parse(JSON.stringify(suppliersDatas));
+    newSupplierDatas
+      .filter(supplier => supplier.orgId === parentId)
+      .map(supplier => {
+        supplier.suppliers
+          .filter(user => user._id === item._id)
+          .map(user => (user.selected = !user.selected));
+        const selectedCount = filter(supplier.suppliers, function (o) {
+          return o.selected;
+        });
+        if (selectedCount.length === supplier.suppliers.length) {
+          supplier.selected = true;
+          supplier.partialSeclection = false;
+        } else if (selectedCount.length > 0) {
+          supplier.selected = false;
+          supplier.partialSeclection = true;
+        } else {
+          supplier.partialSeclection = false;
+          supplier.selected = false;
+        }
+      });
+    setSupplierDatas(newSupplierDatas);
+  };
+
+  const onAccPress = item => {
+    const newSupplierDatas = JSON.parse(JSON.stringify(suppliersDatas));
+    newSupplierDatas
+      .filter(supplier => supplier.orgId === item.orgId)
+      .map(supplier => {
+        if (item.selected) {
+          supplier.selected = false;
+          supplier.partialSeclection = false;
+          return supplier.suppliers.map(user => (user.selected = false));
+        } else if (!item.selected || item.partialSeclection) {
+          supplier.selected = true;
+          return supplier.suppliers.map(user => (user.selected = true));
+        }
+      });
+    setSupplierDatas(newSupplierDatas);
+  };
+
+  const getRecepients = () =>
+    suppliersDatas
+      .filter(
+        supplierData => supplierData.selected || supplierData.partialSeclection,
+      )
+      .map(data =>
+        data.suppliers
+          .filter(supplier => supplier.selected)
+          .map(supplier => ({
+            userId: supplier.userId,
+            email: supplier.email,
+            userName: supplier.userName,
+            orgId: data.orgId,
+          })),
+      )
+      .map(obj => ({[obj[0].orgId]: obj}));
+
+  const onSubmit = () => {
+    setModalVisible(false);
+    const recepients = getRecepients();
+    const data = {
+      name: Date(),
+      description: 'RFQ Enquiry description',
+      attributes: enquiry.attributes,
+      suppliers: recepients,
+      enquiryDetailId: enquiry.enqDetailId,
+    };
+    console.log('recepients', data);
+    if (recepients.length > 0) {
+      dispatch(createRFQs(data))
+        .unwrap()
+        .then(() => {
+          dispatch(getRFQs());
+          navigation.navigate('AgentHome', {tab: 'RFQ'});
+        });
     }
   };
 
-  const blendHandler = e => {
-    setCountBlend(e.value[0]);
-  };
-
-  const startRecordingColor = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = colorHandler;
-    setColor('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const colorHandler = e => {
-    setColor(e.value[0]);
-  };
-
-  const startRecordingShade = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = shadeHandler;
-    setShade('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const shadeHandler = e => {
-    setShade(e.value[0]);
-  };
-
-  const startRecordingQuantity = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = quantityHandler;
-    setQuantity('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const quantityHandler = e => {
-    setQuantity(e.value[0]);
-  };
-
-  const startRecordingRate = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = rateHandler;
-    setQuantity('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const rateHandler = e => {
-    setRate(e.value[0]);
-  };
-
-  const startRecordingAmount = async field => {
-    setCurrentField(field);
-    Voice.onSpeechResults = amountHandler;
-    setQuantity('');
-    try {
-      await Voice.destroy().then(Voice.removeAllListeners);
-      await Voice.start('en-US').then(console.log('started'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const amountHandler = e => {
-    setAmount(e.value[0]);
-  };
-
-  const stopRecording = async () => {
-    setCurrentField('');
-    try {
-      await Voice.stop().then(console.log('stoped'));
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  const onselect = (id, recipient) => {
-    const newData = [...data];
-    newData
-      .filter(item => item.id === id)
-      .map(item =>
-        item.emails
-          .filter(email => email.id === recipient.id)
-          .map(email => (email.selected = !email.selected)),
-      );
-    setData(newData);
-  };
-
-  const renderRecipient = recipients => {
-    return (
-      <View style={{flex: 1}} key={recipients.org}>
-        <TouchableOpacity>
-          <Text headline>{recipients.org}</Text>
-        </TouchableOpacity>
-        {recipients.emails?.map(recipient => (
-          <TouchableOpacity
-            key={recipient.id}
-            onPress={() => onselect(recipients.id, recipient)}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.checkBoxView}>
-                <Icon style={{marginRight: 5}} name="mail" size={15} />
-                <Text style={{color: 'grey'}}>{recipient.email}</Text>
-              </View>
-              <View style={styles.forgotBoxView}>
-                {recipient.selected && (
-                  <Icon
-                    name="checkmark-circle"
-                    color={colors.primary}
-                    size={17}
-                  />
-                )}
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+  const renderAttributes = (attribute, index) => (
+    <>
+      <View style={styles.contentTitle} key={attribute.id + index}>
+        <Text headline>{attribute.name}</Text>
       </View>
-    );
-  };
-
+      <TextInput
+        key={attribute.value + index}
+        editable={false}
+        placeholder="Enter Count & Blend"
+        value={attribute.value}
+      />
+    </>
+  );
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
+      <AgentSelect
+        isVisible={modalVisible}
+        onAccPress={onAccPress}
+        onChildPress={onChildPress}
+        data={suppliersDatas}
+        setModalVisible={setModalVisible}
+        onSubmit={onSubmit}
+        type="suppliers"
+      />
       <Header
         title="Create RFQ"
         renderLeft={() => {
@@ -246,10 +147,6 @@ export default function CreateRFQ({navigation}) {
             />
           );
         }}
-        renderRight={() => {
-          return <Tag declined> Decline </Tag>;
-        }}
-        onPressRight={() => console.log('ascbasmhcb')}
         onPressLeft={() => {
           navigation.goBack();
         }}
@@ -259,107 +156,40 @@ export default function CreateRFQ({navigation}) {
           <ScrollView scrollEventThrottle={8}>
             <View style={[styles.content]}>
               <View style={styles.wrapContent}>
-                <View style={styles.contentTitle}>
-                  <Text headline>Count & Blend</Text>
-                </View>
-                <TextInput
-                  placeholder="Enter Count & Blend"
-                  icon={
-                    currentField !== 'blend'
-                      ? getIcon('blend', startRecordingBlend)
-                      : fontIcon
-                  }
-                  value={countBlend}
-                  onChangeText={text => setCountBlend(text)}
-                />
-                <View style={styles.contentTitle}>
-                  <Text headline>Color</Text>
-                </View>
-                <TextInput
-                  placeholder="Enter Color"
-                  icon={
-                    currentField !== 'color'
-                      ? getIcon('color', startRecordingColor)
-                      : fontIcon
-                  }
-                  value={color}
-                  onChangeText={text => setColor(text)}
-                />
-                <View style={styles.contentTitle}>
-                  <Text headline>Shade</Text>
-                </View>
-                <TextInput
-                  placeholder="Enter Shade"
-                  icon={
-                    currentField !== 'shade'
-                      ? getIcon('shade', startRecordingShade)
-                      : fontIcon
-                  }
-                  value={shade}
-                  onChangeText={text => setShade(text)}
-                />
-                <View style={styles.contentTitle}>
-                  <Text headline>Quantity</Text>
-                </View>
-                <TextInput
-                  placeholder="Enter Quantity"
-                  icon={
-                    currentField !== 'quantity'
-                      ? getIcon('quantity', startRecordingQuantity)
-                      : fontIcon
-                  }
-                  value={quantity}
-                  onChangeText={text => setQuantity(text)}
-                />
-                <View style={styles.contentTitle}>
+                {enquiry.attributes?.map((attribute, index) =>
+                  renderAttributes(attribute, index),
+                )}
+                <View key="Rate" style={styles.contentTitle}>
                   <Text headline>Rate</Text>
                 </View>
                 <TextInput
+                  key="Enter Rate 3"
                   placeholder="Enter Rate"
-                  icon={
-                    currentField !== 'rate'
-                      ? getIcon('rate', startRecordingRate)
-                      : fontIcon
-                  }
-                  value={quantity}
+                  value={rate}
                   onChangeText={text => setRate(text)}
                 />
-                <View style={styles.contentTitle}>
+                <View key="Amount" style={styles.contentTitle}>
                   <Text headline>Amount</Text>
                 </View>
                 <TextInput
+                  key="Enter Amount 1"
                   placeholder="Enter Amount"
-                  icon={
-                    currentField !== 'amount'
-                      ? getIcon('amount', startRecordingAmount)
-                      : fontIcon
-                  }
-                  value={quantity}
+                  value={amount}
                   onChangeText={text => setAmount(text)}
                 />
               </View>
             </View>
           </ScrollView>
         </View>
-        <View style={[styles.contentTitle, {marginHorizontal: 10}]}>
-          <Text headline>Select Recipients</Text>
-        </View>
-        <View style={{flex: 3, marginHorizontal: 10, marginBottom: 20}}>
-          <View style={[styles.inputContainer, styles.shdow]}>
-            <ScrollView scrollEventThrottle={8}>
-              {data.map(recipient => renderRecipient(recipient))}
-            </ScrollView>
-          </View>
-        </View>
       </SafeAreaView>
       <View style={styles.loginBtnContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <LinearGradient
             style={styles.loginBtn}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={[colors.primary, colors.secondary]}>
-            <Text style={styles.loginTxt}>Create RFQ</Text>
+            <Text style={styles.loginTxt}>Create</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

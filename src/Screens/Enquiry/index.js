@@ -121,7 +121,6 @@ export default function Messages({navigation}) {
 
   const onSubmit = () => {
     const recepients = getRecepients();
-    console.log('recepients', recepients);
     const data = {
       name: Date(),
       description: 'Enquiry description',
@@ -147,6 +146,7 @@ export default function Messages({navigation}) {
         data={agentDatas}
         setModalVisible={setModalVisible}
         onSubmit={onSubmit}
+        type="agents"
       />
       <Header
         title="Add Enquiry"

@@ -5,7 +5,7 @@ import {useTheme} from '../../config';
 import Card from '../../component/Accordion/Card';
 import {getEnquiries} from '../../Redux/Features/EnquirySlice';
 
-function RFQ({navigation}) {
+function AgentEnqs({navigation}) {
   const {colors} = useTheme();
   const [refreshing, setRefreshing] = React.useState(false);
   const dispatch = useDispatch();
@@ -58,4 +58,4 @@ function RFQ({navigation}) {
   );
 }
 
-export default RFQ;
+export default AgentEnqs;

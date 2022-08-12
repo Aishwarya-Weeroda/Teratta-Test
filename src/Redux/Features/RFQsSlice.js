@@ -1,12 +1,24 @@
-import {createSlice} from '@reduxjs/toolkit';
-import enquiryDetails from '../../data/EnquiryDetails';
-import RFQDetails from '../../data/RFQDetails';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {http, thunkHandler} from '../Api/Api';
 
 const initialState = {
-  enquiryDetails,
-  sentRFQS: RFQDetails,
-  receivedRFQS: RFQDetails,
+  enquiryDetails: [],
+  sentRFQS: [],
+  receivedRFQS: [],
 };
+const defaultParams = {
+  page: 1,
+  limit: 100,
+};
+export const createRFQs = createAsyncThunk('rfq/create', (payload, thunkAPI) =>
+  thunkHandler(http.post('/enquiries/details/rfqs', payload), thunkAPI),
+);
+
+export const getRFQs = createAsyncThunk(
+  'rfq/get',
+  (params = defaultParams, thunkAPI) =>
+    thunkHandler(http.get('/enquiries/details/rfqs', {params}), thunkAPI),
+);
 
 export const rfqSlice = createSlice({
   name: 'rfq',
@@ -23,6 +35,14 @@ export const rfqSlice = createSlice({
     },
     updateReceivedRFQs: (state, action) => {
       state.receivedRFQS.push(action.payload);
+    },
+  },
+  extraReducers: {
+    [createRFQs.fulfilled]: (state, {payload}) => {
+      // state.sentRFQS = payload;
+    },
+    [getRFQs.fulfilled]: (state, {payload}) => {
+      state.sentRFQS = payload;
     },
   },
 });

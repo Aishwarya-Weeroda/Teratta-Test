@@ -29,6 +29,7 @@ import UserDetails from '../Screens/UserDetails';
 import Comments from '../Screens/Comments';
 import AgentHome from '../Screens/AgentHome';
 import EnquiryDetails from '../Screens/EnquiryDetails';
+import CreateRFQ from '../Screens/CreateRFQs';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -142,6 +143,7 @@ function AgentStackScreen() {
       <AgentStack.Screen name="Filter" component={Filter} />
       <AgentStack.Screen name="AgentHome" component={AgentHome} />
       <AgentStack.Screen name="RFQDetails" component={RFQDetails} />
+      <AgentStack.Screen name="Create RFQ" component={CreateRFQ} />
     </AgentStack.Navigator>
   );
 }

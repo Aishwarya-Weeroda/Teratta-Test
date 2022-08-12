@@ -14,8 +14,6 @@ import Chats from './chats';
 export default function EnquiryDetails({navigation, route}) {
   const {colors} = useTheme();
   const enquiry = route?.params?.enquiry;
-  const [rate, setRate] = useState('');
-  const [amount, setAmount] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const renderAttributes = (attribute, index) => (
@@ -65,22 +63,6 @@ export default function EnquiryDetails({navigation, route}) {
               {enquiry.attributes?.map((attribute, index) =>
                 renderAttributes(attribute, index),
               )}
-              <View style={styles.contentTitle}>
-                <Text headline>Rate</Text>
-              </View>
-              <TextInput
-                placeholder="Enter Rate"
-                value={rate}
-                onChangeText={text => setRate(text)}
-              />
-              <View style={styles.contentTitle}>
-                <Text headline>Amount</Text>
-              </View>
-              <TextInput
-                placeholder="Enter Amount"
-                value={amount}
-                onChangeText={text => setAmount(text)}
-              />
             </View>
           </View>
         </ScrollView>
@@ -91,7 +73,8 @@ export default function EnquiryDetails({navigation, route}) {
         </TouchableOpacity>
       </SafeAreaView>
       <View style={styles.loginBtnContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Create RFQ', {enquiry})}>
           <LinearGradient
             style={styles.loginBtn}
             start={{x: 0, y: 0}}

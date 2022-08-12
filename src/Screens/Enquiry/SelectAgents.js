@@ -18,7 +18,7 @@ const enableExperimental = () => {
   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 };
 
-export default function SelectAgents({onAccPress, onChildPress, data}) {
+export default function SelectAgents({onAccPress, onChildPress, data, type}) {
   const [collapseHour, setCollapseHour] = useState(true);
   const {colors} = useTheme();
   const onCollapse = () => {
@@ -85,7 +85,7 @@ export default function SelectAgents({onAccPress, onChildPress, data}) {
           height: collapseHour ? 0 : null,
           overflow: 'hidden',
         }}>
-        {data?.agents?.map?.((item, index) => {
+        {data?.[type]?.map?.((item, index) => {
           return (
             <View
               style={[styles.lineWorkHours, {borderColor: colors.border}]}
