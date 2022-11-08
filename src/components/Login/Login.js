@@ -14,7 +14,7 @@ const Login = () => {
   const {colors} = useTheme();
 
   const [user, setUser] = useState({
-    userName: 'xyz-hr',
+    userName: 'bvk-hr',
     password: 'pass1234',
     usrError: false,
     pwdError: false,

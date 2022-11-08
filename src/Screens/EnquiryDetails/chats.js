@@ -17,7 +17,7 @@ export default function Chats(props) {
         onSwipeComplete={() => {
           setModalVisible(false);
         }}
-        swipeDirection={['left', 'right']}
+        swipeDirection={['left', 'right','down']}
         style={styles.bottomModal}>
         <View
           style={[

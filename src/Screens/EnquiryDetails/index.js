@@ -52,7 +52,7 @@ export default function EnquiryDetails({navigation, route}) {
       />
       <Chats
         id={enquiry.enqDetailId}
-        isVisible={modalVisible}
+        isVisible={modalVisible} 
         setModalVisible={setModalVisible}
         onSubmit={() => {}}
       />

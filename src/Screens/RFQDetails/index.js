@@ -16,6 +16,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 import styles from './style';
 import Header from '../../component/Header/Header';
+import Button from '../../component/Button';
 
 export default function RFQDetails({navigation}) {
   const {colors} = useTheme();
@@ -144,7 +145,7 @@ export default function RFQDetails({navigation}) {
         enabled>
         <View style={{flex: 2}}>
           <ScrollView scrollEventThrottle={8}>
-          <View style={{marginLeft: 10, marginBottom: 10}}>
+            <View style={{marginLeft: 10, marginBottom: 10}}>
               <Text caption1 grayColor>
                 Count & Blend
               </Text>

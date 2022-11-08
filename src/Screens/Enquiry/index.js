@@ -19,6 +19,7 @@ import EnquiryForm from '../EnquiryForm';
 import AgentSelect from '../Receipient';
 import {getAgentsByOrg} from '../../Redux/Features/AgentsSlice';
 import {addEnquiries, getEnquiries} from '../../Redux/Features/EnquirySlice';
+import {each} from 'immer/dist/internal';
 
 export default function Messages({navigation}) {
   const {colors} = useTheme();
@@ -31,12 +32,14 @@ export default function Messages({navigation}) {
   const [currentIdex, setCurrentindex] = useState();
   const [isRecording, setRecording] = useState(false);
   const [agentDatas, setAgentDatas] = useState(agents);
+  const [err, setErr] = useState(false);
+  const [showErr, setShowerr] = useState(false);
   useEffect(() => {
     dispatch(getAgentsByOrg());
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     setAgentDatas(agents);
   }, [agents]);
@@ -102,6 +105,7 @@ export default function Messages({navigation}) {
     const newData = JSON.parse(JSON.stringify(enquires));
     newData[rootIndex][childIndex].value = value;
     setEnquires(newData);
+    setShowerr(false);
   };
 
   const getRecepients = () =>
@@ -137,6 +141,31 @@ export default function Messages({navigation}) {
     }
   };
 
+  const validation = () => {
+    // for (let i = 0; i < enquires.length;) {
+    //   for (let a = 0; a < enquires[0][i].value.length; a==0) {
+    //     console.log(enquires[i][a]);
+    //   }
+    // }
+
+    enquires.forEach(function (value) {
+      value.forEach(function (col) {
+        console.log(col.value);
+        if (col.value.length == 0) {
+          setErr(true);
+          setShowerr(true);
+        } else if (col.value.length != 0) {
+          setErr(false);
+          setShowerr(false);
+          setModalVisible(true);
+        }
+      });
+    });
+    // if (err) {
+    //   setShowerr(true);
+    // }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: colors.background}}>
       <AgentSelect
@@ -167,7 +196,7 @@ export default function Messages({navigation}) {
         style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
         behavior="padding"
         enabled
-        keyboardVerticalOffset={100}>
+        keyboardVerticalOffset={-200}>
         <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
           <View style={{flex: 1}}>
             <ScrollView>
@@ -215,9 +244,8 @@ export default function Messages({navigation}) {
         </SafeAreaView>
       </KeyboardAvoidingView>
       <View style={[styles.loginBtnContainer, styles.shdow]}>
-        <TouchableOpacity
-          style={{padding: 5}}
-          onPress={() => setModalVisible(true)}>
+        {showErr && <Text style={{color: 'red'}}> Please enter all</Text>}
+        <TouchableOpacity style={{padding: 5}} onPress={validation}>
           <LinearGradient
             style={styles.loginBtn}
             start={{x: 0, y: 0}}

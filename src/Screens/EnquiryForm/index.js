@@ -65,6 +65,7 @@ const EnquiryForm = ({
         <TextInput
           placeholder={field.name}
           style={styles.input}
+          multiline={true}
           value={field.value}
           onChangeText={text => onChangeText(field.id, text, childIndex)}
           onFocus={() => setFocus({id: field.id, index: childIndex})}

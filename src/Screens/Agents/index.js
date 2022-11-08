@@ -10,19 +10,18 @@ import {getAgents} from '../../Redux/Features/AgentsSlice';
 export default function Agents({navigation}) {
   const {colors} = useTheme();
   const dispatch = useDispatch();
-  const data = useSelector(state => state.agents.agentsData);
+  const datas = useSelector(state => state.agents.agentsData);
   useEffect(() => {
-    console.log('data', data);
     dispatch(getAgents());
   }, []);
 
   return (
-    <View style={{flex: 1, backgroundColor: colors.background}}>
-      <Header title="Agents" />
+    <View style={{flex: 1, backgroundColor: colors.background, }}>
+      <Header style={{ elevation : 2, borderBottomWidth: 3, borderColor: "white", }} title="Agents" />
       <SafeAreaView
         style={BaseStyle.safeAreaView}
         edges={['right', 'left', 'bottom']}>
-        <UserList navigation={navigation} data={data} />
+        <UserList navigation={navigation} data={datas} />
       </SafeAreaView>
     </View>
   );

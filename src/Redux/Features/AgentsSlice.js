@@ -6,11 +6,18 @@ const initialState = {
   agents: [],
   suppliers: [],
   agentsData: [],
+  buyers: [],
 };
 const defaultParams = {
   page: 1,
   limit: 100,
   type: 'AGENT',
+};
+
+const defaultParams1 = {
+  page: 1,
+  limit: 100,
+  type: 'SUPPLIER',
 };
 
 export const getAgents = createAsyncThunk(
@@ -19,9 +26,20 @@ export const getAgents = createAsyncThunk(
     thunkHandler(http.get('/enquiries/users', {params}), thunkAPI),
 );
 
+export const getBuyers = createAsyncThunk(
+  'buyers/get',
+  (params = defaultParams, thunkAPI) =>
+    thunkHandler(http.get('/enquiries/users', {params}), thunkAPI),
+);
+export const getSupplier = createAsyncThunk(
+  'supplier/get',
+  (params = defaultParams1, thunkAPI) =>
+    thunkHandler(http.get('/enquiries/users', {params}), thunkAPI),
+);
+
 export const getSuppliersByOrg = createAsyncThunk(
   'supplier/get',
-  (params = defaultParams, thunkAPI) =>
+  (params = defaultParams1, thunkAPI) =>
     thunkHandler(
       http.get('/enquiries/users', {
         params: {...params, type: 'SUPPLIER', groupBy: 'orgId'},
@@ -52,6 +70,14 @@ export const agentsSlice = createSlice({
     },
     [getSuppliersByOrg.fulfilled]: (state, {payload}) => {
       state.suppliers = payload;
+    },
+
+    [getSupplier.fulfilled]: (state, {payload}) => {
+      state.suppliers = payload;
+    },
+
+    [getBuyers.fulfilled]: (state, {payload}) => {
+      state.buyers = payload;
     },
   },
 });
